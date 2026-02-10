@@ -1,4 +1,5 @@
 import React from 'react'
+import './style.css'
 
 export default function FirstApp() {
     const mystyle={
@@ -9,9 +10,13 @@ export default function FirstApp() {
   return (
     <div>
         <h1>My First App</h1>
-        <h4 style={{color:"blue"}}>Inline CSS</h4>
+        <h3 style={{color:"blue"}}>Inline CSS</h3>
 
-        <h4 style={mystyle}>Internal CSS</h4>
+        <h3 style={mystyle}>Internal CSS</h3>
+        <h4 className='myclass'>External CSS</h4>
+
+        {/* <img src={img1} alt="My Image" height={200} width={200}/> */}
+
     </div>
   )
 }
