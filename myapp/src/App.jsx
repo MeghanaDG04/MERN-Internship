@@ -3,6 +3,9 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Testing from "./Components/Testing";
 import FirstApp from "./Components/FirstApp";
 import Register from "./Components/MUI/Register";
+import Arrowfunction from "./Components/ES7/Arrowfunction";
+import Basictable from "./Components/MUI/Basictable";
+
 
 function App() {
   return (
@@ -12,6 +15,8 @@ function App() {
                 <Route path='/first' element={<FirstApp/>} />
                 <Route path='/testing' element={<Testing/>} />
                 <Route path='/register' element={<Register/>} />
+                <Route path='/arrowfunction' element={<Arrowfunction/>} />
+                <Route path='/basictable' element={<Basictable/>} />
             </Routes>
       </BrowserRouter>
     </div>
