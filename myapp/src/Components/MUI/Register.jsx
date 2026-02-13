@@ -1,19 +1,94 @@
-import React from 'react'
-import Typography from '@mui/material/Typography';
-import {Button, Paper, TextField} from '@mui/material';
+import React from 'react';
+import { 
+  Typography, 
+  Button, 
+  Paper, 
+  TextField, 
+  Box 
+} from '@mui/material';
 
 export default function Register() {
   return (
-    <div>
-        <Paper elevation={10} style={{width : 500, margin : "10px auto", padding : 20}}>
-          <Typography variant='h4' style={{textAlign:'center'}}>REGISTER PAGE</Typography>
-          <TextField label="Name"  type="text" variant="outlined" fullWidth style={{marginBottom: 10}}/> 
-          <TextField label="Email" type="email" variant="outlined" fullWidth style={{marginBottom: 10}}/> 
-          <TextField label="Password" type="password" variant="outlined" fullWidth style={{marginBottom: 10}}/> 
-          <TextField label="Phone" type="number" variant="outlined" fullWidth style={{marginBottom: 10}}/> 
-          <TextField label="Address" multiline rows={5} variant="outlined" fullWidth style={{marginBottom: 10}}/>
-          <Button variant='contained' color='secondary'>REGISTER</Button>
-        </Paper>
-    </div>
-  )
+    <Box
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#f4f6f8'
+      }}
+    >
+      <Paper
+        elevation={6}
+        sx={{
+          width: 420,
+          padding: 4,
+          borderRadius: 3
+        }}
+      >
+        <Typography
+          variant="h5"
+          align="center"
+          fontWeight="bold"
+          gutterBottom
+        >
+          Register
+        </Typography>
+
+        <Typography
+          variant="body2"
+          align="center"
+          color="text.secondary"
+          mb={3}
+        >
+          Create your account
+        </Typography>
+
+        <TextField
+          label="Name"
+          fullWidth
+          margin="normal"
+        />
+
+        <TextField
+          label="Email"
+          type="email"
+          fullWidth
+          margin="normal"
+        />
+
+        <TextField
+          label="Password"
+          type="password"
+          fullWidth
+          margin="normal"
+        />
+
+        <TextField
+          label="Phone"
+          type="number"
+          fullWidth
+          margin="normal"
+        />
+
+        <TextField
+          label="Address"
+          multiline
+          rows={3}
+          fullWidth
+          margin="normal"
+        />
+
+        <Button
+          variant="contained"
+          color="secondary"
+          fullWidth
+          size="large"
+          sx={{ mt: 2, borderRadius: 2 }}
+        >
+          Register
+        </Button>
+      </Paper>
+    </Box>
+  );
 }
