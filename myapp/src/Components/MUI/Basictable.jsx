@@ -18,6 +18,7 @@ const rows = [
   createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
+
 export default function Basictable() {
   return (
     <TableContainer component={Paper}>
@@ -51,3 +52,4 @@ export default function Basictable() {
     </TableContainer>
   );
 }
+
