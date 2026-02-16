@@ -5,7 +5,8 @@ import FirstApp from "./Components/FirstApp";
 import Register from "./Components/MUI/Register";
 import Arrowfunction from "./Components/ES7/Arrowfunction";
 import Basictable from "./Components/MUI/Basictable";
-
+import ArrayMethod from "./Components/ES7/ArrayMethod";
+import SpreadOperator from "./Components/ES7/SpreadOperator";
 
 function App() {
   return (
@@ -17,6 +18,8 @@ function App() {
                 <Route path='/register' element={<Register/>} />
                 <Route path='/arrowfunction' element={<Arrowfunction/>} />
                 <Route path='/basictable' element={<Basictable/>} />
+                <Route path='/arraymethod' element={<ArrayMethod/>} />
+                <Route path='/spreadoperator' element={<SpreadOperator/>} />
             </Routes>
       </BrowserRouter>
     </div>
