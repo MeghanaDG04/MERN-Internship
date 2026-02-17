@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function task() {
+export default function Task() {
 
     const Product= [ 
     { name: 'Laptop', price: 50000, category: 'Electronics',company:'HP', raing:4.5 },

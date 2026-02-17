@@ -7,11 +7,15 @@ import Arrowfunction from "./Components/ES7/Arrowfunction";
 import Basictable from "./Components/MUI/Basictable";
 import ArrayMethod from "./Components/ES7/ArrayMethod";
 import SpreadOperator from "./Components/ES7/SpreadOperator";
+import Cards from "./Components/MUI/Cards";
+import MuiAppBar from "./Components/MUI/MuiAppBar";
+import Destructuring from "./Components/ES7/Destructuring";
 
 function App() {
   return (
     <div>
       <BrowserRouter>
+      <MuiAppBar/>
             <Routes>
                 <Route path='/first' element={<FirstApp/>} />
                 <Route path='/testing' element={<Testing/>} />
@@ -20,6 +24,9 @@ function App() {
                 <Route path='/basictable' element={<Basictable/>} />
                 <Route path='/arraymethod' element={<ArrayMethod/>} />
                 <Route path='/spreadoperator' element={<SpreadOperator/>} />
+                <Route path='/cards' element={<Cards/>} />
+                <Route path='/destructuring' element={<Destructuring/>} />
+
             </Routes>
       </BrowserRouter>
     </div>
