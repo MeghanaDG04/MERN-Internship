@@ -10,6 +10,10 @@ import SpreadOperator from "./Components/ES7/SpreadOperator";
 import Cards from "./Components/MUI/Cards";
 import MuiAppBar from "./Components/MUI/MuiAppBar";
 import Destructuring from "./Components/ES7/Destructuring";
+import Importmodule from "./Components/ES7/Importmodule";
+import TernaryOperator from "./Components/ES7/TernaryOperator";
+import Props from "./Components/ES7/Props";
+import HookUsestate from "./Components/Hook/HookUsestate";
 
 function App() {
   return (
@@ -26,6 +30,10 @@ function App() {
                 <Route path='/spreadoperator' element={<SpreadOperator/>} />
                 <Route path='/cards' element={<Cards/>} />
                 <Route path='/destructuring' element={<Destructuring/>} />
+                <Route path='/importmodule' element={<Importmodule/>} />
+                <Route path='/ternaryoperator' element={<TernaryOperator/>} />
+                <Route path='/props' element={<Props name="Meghana"/>} />
+                <Route path='/hookusestate' element={<HookUsestate/>} />
 
             </Routes>
       </BrowserRouter>

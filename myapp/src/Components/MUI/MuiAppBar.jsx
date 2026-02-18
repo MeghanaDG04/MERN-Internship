@@ -7,9 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const pages = [
     {name:"REGISTER", path:"/register"},
     {name:"CARDS", path:"/cards"},
-    {name:"SPREAD OPERATOR", path:"/spreadoperator"},
-    {name:"ARROW FUNCTION", path:"/arrowfunction"},
-    {name: "DESRUCTURING", path:"/destructuring"},
+    {name:"HookUsestate", path:"/hookusestate"}
 ];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
