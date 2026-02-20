@@ -33,11 +33,6 @@ export default function Cards() {
               <h4>{place.description}</h4>
             </Typography>
           </CardContent>
-
-          {/* <CardActions>
-            <Button size="small">Share</Button>
-            <Button size="small">Learn More</Button>
-          </CardActions> */}
         </Card>
       ))}
     </div>
