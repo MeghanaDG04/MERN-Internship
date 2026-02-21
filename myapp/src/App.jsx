@@ -14,6 +14,8 @@ import Importmodule from "./Components/ES7/Importmodule";
 import TernaryOperator from "./Components/ES7/TernaryOperator";
 import Props from "./Components/ES7/Props";
 import HookUsestate from "./Components/Hook/HookUsestate";
+import Toggle from "./Components/MUI/Toggle";
+import CounterComponent from "./Components/MUI/CounterComponent";
 
 function App() {
   return (
@@ -34,6 +36,8 @@ function App() {
                 <Route path='/ternaryoperator' element={<TernaryOperator/>} />
                 <Route path='/props' element={<Props name="Meghana"/>} />
                 <Route path='/hookusestate' element={<HookUsestate/>} />
+                <Route path='/toggle' element={<Toggle/>} />
+                <Route path='/counter' element={<CounterComponent/>} />
 
             </Routes>
       </BrowserRouter>
