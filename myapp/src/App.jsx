@@ -16,6 +16,8 @@ import Props from "./Components/ES7/Props";
 import HookUsestate from "./Components/Hook/HookUsestate";
 import Toggle from "./Components/MUI/Toggle";
 import CounterComponent from "./Components/MUI/CounterComponent";
+import HookUseEffect from "./Components/Hook/HookUseEffect";
+import ApiAxios from "./Components/Hook/ApiAxios";
 
 function App() {
   return (
@@ -38,6 +40,8 @@ function App() {
                 <Route path='/hookusestate' element={<HookUsestate/>} />
                 <Route path='/toggle' element={<Toggle/>} />
                 <Route path='/counter' element={<CounterComponent/>} />
+                <Route path='/hookuseeffect' element={<HookUseEffect/>} />
+                <Route path='/apiaxios' element={<ApiAxios/>} />
 
             </Routes>
       </BrowserRouter>

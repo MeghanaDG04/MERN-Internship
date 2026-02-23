@@ -7,7 +7,11 @@ import { useNavigate } from 'react-router-dom';
 const pages = [
     {name:"REGISTER", path:"/register"},
     {name:"CARDS", path:"/cards"},
-    {name:"HookUsestate", path:"/hookusestate"}
+    {name:"HookUsestate", path:"/hookusestate"},
+    {name:"HookUseEffect", path:"/hookuseeffect"},
+    {name:"ApiAxios", path:"/apiaxios"}
+    
+    
 ];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
