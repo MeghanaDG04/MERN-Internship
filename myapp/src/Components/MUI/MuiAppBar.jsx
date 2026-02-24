@@ -9,7 +9,8 @@ const pages = [
     {name:"CARDS", path:"/cards"},
     {name:"HookUsestate", path:"/hookusestate"},
     {name:"HookUseEffect", path:"/hookuseeffect"},
-    {name:"ApiAxios", path:"/apiaxios"}
+    {name:"ApiAxios", path:"/apiaxios"},
+    {name:"ProductCard", path:"/productcard"}
     
     
 ];

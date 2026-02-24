@@ -1,94 +1,47 @@
-import React from 'react';
-import { 
-  Typography, 
-  Button, 
-  Paper, 
-  TextField, 
-  Box 
-} from '@mui/material';
+import React, { useState } from "react";
+import Typography from "@mui/material/Typography";
+import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
 export default function Register() {
+  const [formdata, setFormdata] = useState({
+    name : '',
+    email : '',
+    password : '',
+    phone : '',
+    address : ''
+  })
+
+  const handleChange = (e)=>{
+    console.log({ [e.target.name]:e.target.value})
+
+    setFormdata({...formdata, [e.target.name]:e.target.value})
+  }
+
+  const handleregister = ()=>{
+    const existinguser = JSON.parse(localStorage.getItem('userdetails')) || [];
+    //console.log(existinguser)
+    const allusers = [...existinguser,formdata]
+    localStorage.setItem('userdetails', JSON.stringify(allusers))
+    alert('Registration successful!')
+  }
+
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#f4f6f8'
-      }}
-    >
-      <Paper
-        elevation={6}
-        sx={{
-          width: 420,
-          padding: 4,
-          borderRadius: 3
-        }}
-      >
-        <Typography
-          variant="h5"
-          align="center"
-          fontWeight="bold"
-          gutterBottom
-        >
-          Register
-        </Typography>
-
-        <Typography
-          variant="body2"
-          align="center"
-          color="text.secondary"
-          mb={3}
-        >
-          Create your account
-        </Typography>
-
-        <TextField
-          label="Name"
-          fullWidth
-          margin="normal"
-        />
-
-        <TextField
-          label="Email"
-          type="email"
-          fullWidth
-          margin="normal"
-        />
-
-        <TextField
-          label="Password"
-          type="password"
-          fullWidth
-          margin="normal"
-        />
-
-        <TextField
-          label="Phone"
-          type="number"
-          fullWidth
-          margin="normal"
-        />
-
-        <TextField
-          label="Address"
-          multiline
-          rows={3}
-          fullWidth
-          margin="normal"
-        />
-
-        <Button
-          variant="contained"
-          color="secondary"
-          fullWidth
-          size="large"
-          sx={{ mt: 2, borderRadius: 2 }}
-        >
-          Register
-        </Button>
+    <div>
+      <Paper elevation={20} style={{ padding: 20, width: 500, margin: "20px auto" }}>
+      <Typography variant="h5" component="h2">
+        Register New Account
+      </Typography>
+      <TextField fullWidth label="Username" name='name'variant="outlined" margin="normal" type="text" onChange={handleChange} />
+      <TextField fullWidth label="Email" name='email' variant="outlined" margin="normal" type="email" onChange={handleChange} />
+      <TextField fullWidth label="Password" name='password' variant="outlined" margin="normal" type="password" onChange={handleChange} />
+      <TextField fullWidth label="Phone" name='phone'variant="outlined" margin="normal" type="tel" onChange={handleChange} />
+      <TextField fullWidth label="Address" name='address' variant="outlined" margin="normal" type="text" onChange={handleChange} />
+      <Button variant="contained" color="primary" fullWidth style={{ marginTop: 20 }} onClick={handleregister}>
+        Register
+      </Button>
       </Paper>
-    </Box>
+    </div>
   );
 }

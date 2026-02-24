@@ -18,6 +18,7 @@ import Toggle from "./Components/MUI/Toggle";
 import CounterComponent from "./Components/MUI/CounterComponent";
 import HookUseEffect from "./Components/Hook/HookUseEffect";
 import ApiAxios from "./Components/Hook/ApiAxios";
+import ProductCard from "./Components/Hook/ProductCard";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
                 <Route path='/counter' element={<CounterComponent/>} />
                 <Route path='/hookuseeffect' element={<HookUseEffect/>} />
                 <Route path='/apiaxios' element={<ApiAxios/>} />
+                <Route path='/productcard' element={<ProductCard/>} />
 
             </Routes>
       </BrowserRouter>
