@@ -19,6 +19,7 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
+import PeopleIcon from '@mui/icons-material/People';
 import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
@@ -136,11 +137,19 @@ export default function Sidebar() {
         <List>
           {/* {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => ( */}
             <ListItem disablePadding>
-              <ListItemButton component={Link} to="/ahome">
+              <ListItemButton component={Link} to="/admin/ahome">
                 <ListItemIcon>
                   <DashboardRoundedIcon />
                 </ListItemIcon>
                 <ListItemText primary="Dashboard" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component={Link} to="/admin/manageuser">
+                <ListItemIcon>
+                  <PeopleIcon />
+                </ListItemIcon>
+                <ListItemText primary="Manage Users" />
               </ListItemButton>
             </ListItem>
           {/* ))} */}
