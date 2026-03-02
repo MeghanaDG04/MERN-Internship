@@ -1,203 +1,186 @@
-import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
-import PeopleIcon from '@mui/icons-material/People';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
+import {
+  Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText,
+  Typography, Collapse, Avatar, Divider,
+} from '@mui/material'
+import DashboardIcon from '@mui/icons-material/Dashboard'
+import PeopleIcon from '@mui/icons-material/People'
+import CategoryIcon from '@mui/icons-material/Category'
+import AddCircleIcon from '@mui/icons-material/AddCircle'
+import ViewListIcon from '@mui/icons-material/ViewList'
+import LogoutIcon from '@mui/icons-material/Logout'
+import ExpandLess from '@mui/icons-material/ExpandLess'
+import ExpandMore from '@mui/icons-material/ExpandMore'
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
+import InventoryIcon from '@mui/icons-material/Inventory'
+import PaymentIcon from '@mui/icons-material/Payment'
+import FeedbackIcon from '@mui/icons-material/Feedback'
 
-const drawerWidth = 240;
+const drawerWidth = 260
 
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme }) => ({
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: `-${drawerWidth}px`,
-    variants: [
-      {
-        props: ({ open }) => open,
-        style: {
-          transition: theme.transitions.create('margin', {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-          }),
-          marginLeft: 0,
-        },
-      },
-    ],
-  }),
-);
+const menuItems = [
+  { text: 'Dashboard', icon: <DashboardIcon />, path: '/admin/dashboard' },
+  { text: 'Users', icon: <PeopleIcon />, path: '/admin/users' },
+  { text: 'Products', icon: <InventoryIcon />, path: '/admin/products' },
+  { text: 'Payments', icon: <PaymentIcon />, path: '/admin/payments' },
+  { text: 'Feedback', icon: <FeedbackIcon />, path: '/admin/feedback' },
+]
 
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme }) => ({
-  transition: theme.transitions.create(['margin', 'width'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  variants: [
-    {
-      props: ({ open }) => open,
-      style: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: `${drawerWidth}px`,
-        transition: theme.transitions.create(['margin', 'width'], {
-          easing: theme.transitions.easing.easeOut,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-      },
-    },
-  ],
-}));
-
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-  justifyContent: 'flex-end',
-}));
+const categoryItems = [
+  { text: 'Add Category', icon: <AddCircleIcon />, path: '/admin/category/add' },
+  { text: 'View Category', icon: <ViewListIcon />, path: '/admin/category/view' },
+]
 
 export default function Sidebar() {
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [categoryOpen, setCategoryOpen] = useState(false)
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+  const handleLogout = () => {
+    localStorage.removeItem('adminLoggedIn')
+    navigate('/admin/login')
+  }
 
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  const isActive = (path) => location.pathname === path
+  const isCategoryActive = categoryItems.some((item) => location.pathname === item.path)
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={[
-              {
-                mr: 2,
-              },
-              open && { display: 'none' },
-            ]}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            ADMIN
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        sx={{
+    <Drawer
+      variant="permanent"
+      sx={{
+        width: drawerWidth,
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
           width: drawerWidth,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: drawerWidth,
-            boxSizing: 'border-box',
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
-      >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          {/* {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => ( */}
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/admin/ahome">
-                <ListItemIcon>
-                  <DashboardRoundedIcon />
-                </ListItemIcon>
-                <ListItemText primary="Dashboard" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to="/admin/manageuser">
-                <ListItemIcon>
-                  <PeopleIcon />
-                </ListItemIcon>
-                <ListItemText primary="Manage Users" />
-              </ListItemButton>
-            </ListItem>
-          {/* ))} */}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-      <Main open={open}>
-        <DrawerHeader />
-        <Typography sx={{ marginBottom: 2 }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-          enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-          imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-          Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-          Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-          nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-          leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-          feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-          consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-          sapien faucibus et molestie ac.
+          boxSizing: 'border-box',
+          background: 'linear-gradient(195deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+          color: '#fff',
+          borderRight: 'none',
+        },
+      }}
+    >
+      {/* Logo / Brand */}
+      <Box sx={{ p: 3, textAlign: 'center' }}>
+        <Avatar sx={{
+          m: 'auto', mb: 1, width: 60, height: 60,
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        }}>
+          <AdminPanelSettingsIcon sx={{ fontSize: 32 }} />
+        </Avatar>
+        <Typography variant="h6" fontWeight={700}>Admin Panel</Typography>
+        <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.6)' }}>
+          Management Dashboard
         </Typography>
-        <Typography sx={{ marginBottom: 2 }}>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-          eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-          neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-          tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-          sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-          tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-          gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-          et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-          tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
-      </Main>
-    </Box>
-  );
+      </Box>
+
+      <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)' }} />
+
+      {/* Nav Items */}
+      <List sx={{ px: 1, mt: 1 }}>
+        {menuItems.map((item) => (
+          <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
+            <ListItemButton
+              component={Link} to={item.path}
+              sx={{
+                borderRadius: 2, mx: 1,
+                bgcolor: isActive(item.path) ? 'rgba(102,126,234,0.3)' : 'transparent',
+                '&:hover': { bgcolor: 'rgba(102,126,234,0.2)' },
+              }}
+            >
+              <ListItemIcon sx={{
+                color: isActive(item.path) ? '#667eea' : 'rgba(255,255,255,0.7)',
+                minWidth: 40,
+              }}>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText
+                primary={item.text}
+                primaryTypographyProps={{
+                  fontSize: '0.9rem',
+                  fontWeight: isActive(item.path) ? 600 : 400,
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
+        ))}
+
+        {/* Category with submenu */}
+        <ListItem disablePadding sx={{ mb: 0.5 }}>
+          <ListItemButton
+            onClick={() => setCategoryOpen(!categoryOpen)}
+            sx={{
+              borderRadius: 2, mx: 1,
+              bgcolor: isCategoryActive ? 'rgba(102,126,234,0.15)' : 'transparent',
+              '&:hover': { bgcolor: 'rgba(102,126,234,0.2)' },
+            }}
+          >
+            <ListItemIcon sx={{
+              color: isCategoryActive ? '#667eea' : 'rgba(255,255,255,0.7)',
+              minWidth: 40,
+            }}>
+              <CategoryIcon />
+            </ListItemIcon>
+            <ListItemText primary="Category" primaryTypographyProps={{ fontSize: '0.9rem' }} />
+            {categoryOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+        </ListItem>
+
+        <Collapse in={categoryOpen} timeout="auto" unmountOnExit>
+          <List disablePadding>
+            {categoryItems.map((item) => (
+              <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
+                <ListItemButton
+                  component={Link} to={item.path}
+                  sx={{
+                    borderRadius: 2, mx: 1, pl: 4,
+                    bgcolor: isActive(item.path) ? 'rgba(102,126,234,0.3)' : 'transparent',
+                    '&:hover': { bgcolor: 'rgba(102,126,234,0.2)' },
+                  }}
+                >
+                  <ListItemIcon sx={{
+                    color: isActive(item.path) ? '#667eea' : 'rgba(255,255,255,0.5)',
+                    minWidth: 36,
+                  }}>
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={item.text}
+                    primaryTypographyProps={{
+                      fontSize: '0.85rem',
+                      fontWeight: isActive(item.path) ? 600 : 400,
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Collapse>
+      </List>
+
+      <Box sx={{ flexGrow: 1 }} />
+
+      {/* Logout */}
+      <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)' }} />
+      <List sx={{ px: 1, pb: 2 }}>
+        <ListItem disablePadding>
+          <ListItemButton
+            onClick={handleLogout}
+            sx={{
+              borderRadius: 2, mx: 1,
+              '&:hover': { bgcolor: 'rgba(255,82,82,0.2)' },
+            }}
+          >
+            <ListItemIcon sx={{ color: '#ff5252', minWidth: 40 }}>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="Logout"
+              primaryTypographyProps={{ fontSize: '0.9rem', color: '#ff5252' }}
+            />
+          </ListItemButton>
+        </ListItem>
+      </List>
+    </Drawer>
+  )
 }

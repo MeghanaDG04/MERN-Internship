@@ -63,7 +63,7 @@ function Topbar() {
               letterSpacing: ".2rem",
               cursor: "pointer",
             }}
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/homepage")}
           >
             STREAKLY
           </Typography>

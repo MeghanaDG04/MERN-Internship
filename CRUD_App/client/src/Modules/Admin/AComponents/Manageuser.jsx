@@ -1,53 +1,255 @@
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Button,
+} from "@mui/material";
 
-function createData(name, email, password, phone, address) {
-  return { name, email, password, phone, address };
-}
-
-const rows = [
-  createData('User1', 'user1@gmail.com',' User1@123', 1234567890, 'Address1'),
-  createData('User2', 'user2@gmail.com',' User2@123', 1234567890, 'Address2'),
-  createData('User3', 'user3@gmail.com',' User3@123', 1234567890, 'Address3'),
-  createData('User4', 'user4@gmail.com',' User4@123', 1234567890, 'Address4'),
-  createData('User5', 'user5@gmail.com',' User5@123', 1234567890, 'Address5'),
-];
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import PersonIcon from "@mui/icons-material/Person";
 
 export default function Manageuser() {
+  const [users, setUsers] = useState([]);
+
+  // Edit Dialog State
+  const [open, setOpen] = useState(false);
+  const [editIndex, setEditIndex] = useState(null);
+  const [editUser, setEditUser] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    password: "",
+  });
+
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("userdetails")) || [];
+    setUsers(stored);
+  }, []);
+
+  // Delete User
+  const handleDelete = (index) => {
+    const updated = users.filter((_, i) => i !== index);
+    setUsers(updated);
+    localStorage.setItem("userdetails", JSON.stringify(updated));
+  };
+
+  // Open Edit Dialog
+  const handleEdit = (index) => {
+    setEditIndex(index);
+    setEditUser(users[index]);
+    setOpen(true);
+  };
+
+  // Update User
+  const handleUpdate = () => {
+    const updatedUsers = [...users];
+    updatedUsers[editIndex] = editUser;
+    setUsers(updatedUsers);
+    localStorage.setItem("userdetails", JSON.stringify(updatedUsers));
+    setOpen(false);
+  };
+
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell align="right">Email</TableCell>
-            <TableCell align="right">Password</TableCell>
-            <TableCell align="right">Phone</TableCell>
-            <TableCell align="right">Address</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Box>
+      <Typography variant="h4" fontWeight={700} mb={1}>
+        Manage Users
+      </Typography>
+
+      <Typography variant="body1" color="text.secondary" mb={4}>
+        View and manage all registered users.
+      </Typography>
+
+      <Paper
+        elevation={0}
+        sx={{
+          borderRadius: 3,
+          overflow: "hidden",
+          background: "rgba(255,255,255,0.9)",
+          backdropFilter: "blur(10px)",
+          border: "1px solid rgba(0,0,0,0.05)",
+        }}
+      >
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow
+                sx={{
+                  background:
+                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                }}
+              >
+                <TableCell sx={{ color: "#fff", fontWeight: 700 }}>
+                  #
+                </TableCell>
+                <TableCell sx={{ color: "#fff", fontWeight: 700 }}>
+                  Name
+                </TableCell>
+                <TableCell sx={{ color: "#fff", fontWeight: 700 }}>
+                  Email
+                </TableCell>
+                <TableCell sx={{ color: "#fff", fontWeight: 700 }}>
+                  Phone
+                </TableCell>
+                <TableCell sx={{ color: "#fff", fontWeight: 700 }}>
+                  Address
+                </TableCell>
+                <TableCell sx={{ color: "#fff", fontWeight: 700 }}>
+                  Password
+                </TableCell>
+                <TableCell
+                  sx={{ color: "#fff", fontWeight: 700 }}
+                  align="center"
+                >
+                  Action
+                </TableCell>
+              </TableRow>
+            </TableHead>
+
+            <TableBody>
+              {users.length > 0 ? (
+                users.map((user, index) => (
+                  <TableRow
+                    key={index}
+                    sx={{
+                      "&:hover": {
+                        bgcolor: "rgba(102,126,234,0.05)",
+                      },
+                      transition: "0.2s",
+                    }}
+                  >
+                    <TableCell>{index + 1}</TableCell>
+
+                    <TableCell>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                        }}
+                      >
+                        <PersonIcon
+                          sx={{
+                            color: "#667eea",
+                            fontSize: 20,
+                          }}
+                        />
+                        {user.name}
+                      </Box>
+                    </TableCell>
+
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.phone}</TableCell>
+                    <TableCell>{user.address}</TableCell>
+                    <TableCell>{user.password}</TableCell>
+
+                    <TableCell align="center">
+                      <IconButton
+                        color="primary"
+                        size="small"
+                        onClick={() => handleEdit(index)}
+                      >
+                        <EditIcon />
+                      </IconButton>
+
+                      <IconButton
+                        color="error"
+                        size="small"
+                        onClick={() => handleDelete(index)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
+                    <Typography color="text.secondary">
+                      No users found
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
+
+      {/* EDIT DIALOG */}
+      <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
+        <DialogTitle>Edit User</DialogTitle>
+
+        <DialogContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            mt: 1,
+          }}
+        >
+          <TextField
+            label="Name"
+            value={editUser.name}
+            onChange={(e) =>
+              setEditUser({ ...editUser, name: e.target.value })
+            }
+          />
+
+          <TextField
+            label="Email"
+            value={editUser.email}
+            onChange={(e) =>
+              setEditUser({ ...editUser, email: e.target.value })
+            }
+          />
+
+          <TextField
+            label="Phone"
+            value={editUser.phone}
+            onChange={(e) =>
+              setEditUser({ ...editUser, phone: e.target.value })
+            }
+          />
+
+          <TextField
+            label="Address"
+            value={editUser.address}
+            onChange={(e) =>
+              setEditUser({ ...editUser, address: e.target.value })
+            }
+          />
+
+          <TextField
+            label="Password"
+            value={editUser.password}
+            onChange={(e) =>
+              setEditUser({ ...editUser, password: e.target.value })
+            }
+          />
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button variant="contained" onClick={handleUpdate}>
+            Update
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 }
