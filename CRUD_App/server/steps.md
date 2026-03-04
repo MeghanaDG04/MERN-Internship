@@ -6,4 +6,4 @@ Step 4 : Install dependencies - npm i express cors mongoose nodemon
 Step 5 : Install MongoDB
 
 
-npx nodemon index.js - to run server
+npx nodemon index.js or nodemon - to run server

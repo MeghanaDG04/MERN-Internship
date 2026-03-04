@@ -1,5 +1,6 @@
 const express = require('express')
 const dbconnection = require('./db')
+
 //express ois a web framework which is responsible for handle incoming request and response.
 
 const app = express()
@@ -15,6 +16,8 @@ app.listen(PORTNUMBER,()=>{
 })
 dbconnection()
 
+
+
 //app.get is a method which is used to define a route for handling request(POST,GET,PUT,DELETE)
 
 // /api is endpoint
@@ -24,5 +27,5 @@ app.get('/apitest',(req,res)=>{
     res.send('API is working fine') // response text from server
 })
 
-
-
+app.use(express.json()) //middleware which is used to parse incoming request body in json format
+app.use('/user', require('./Routes/UserRoutes'))
