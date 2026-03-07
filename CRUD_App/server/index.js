@@ -1,7 +1,7 @@
 const express = require('express')
 const dbconnection = require('./db')
 
-//express ois a web framework which is responsible for handle incoming request and response.
+//express is a web framework which is responsible for handle incoming request and response.
 
 const app = express()
 //app is an instance of express which we is used to define routes and middleware and handle incoming request and response.
@@ -29,3 +29,6 @@ app.get('/apitest',(req,res)=>{
 
 app.use(express.json()) //middleware which is used to parse incoming request body in json format
 app.use('/user', require('./Routes/UserRoutes'))
+
+app.use('/product', require('./Routes/ProductRoutes'))
+
