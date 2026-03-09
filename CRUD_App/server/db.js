@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+//handle connection to the database and export it to be used in other parts of the application
 
 const CONNECTION_URI = 'mongodb://localhost:27017/mern_internship'; 
 // mongodb://localhost:27017 = connection link

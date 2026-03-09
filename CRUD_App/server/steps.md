@@ -6,4 +6,8 @@ Step 4 : Install dependencies - npm i express cors mongoose nodemon
 Step 5 : Install MongoDB
 
 
-npx nodemon index.js or nodemon - to run server
+* npx nodemon index.js or nodemon - to run server automatically (runs whenever there is changes in the file)
+* express - is a web framework which is responsible for handle incoming request and response.
+        it listen to the incoming request.
+* Mongoose - handles database connection
+* cors - (cross origin resource sharing) = used for security purpose
