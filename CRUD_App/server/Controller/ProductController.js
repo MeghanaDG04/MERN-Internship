@@ -2,8 +2,8 @@ const productTable = require('../Models/ProductModel');
 
 const addProduct = async (req,res)=>{
     try {
-        const {name,description,price,quantity,category} = req.body 
-        const productDetails = new productTable({name,description,price,quantity,category})
+        const {name,description,price,category} = req.body 
+        const productDetails = new productTable({name,description,price,category})
         await productDetails.save()
         res.status(201).json({message: "Product added successfully", pdata: productDetails})
     } catch (error) {
@@ -25,8 +25,8 @@ const getProducts = async (req,res)=>{
 const editProduct = async (req,res)=>{
     try {
         const {id} = req.params
-        const {name,description,price,quantity,category} = req.body 
-        const updatedProduct = await productTable.findByIdAndUpdate(id, {name,description,price,quantity,category}, {new: true})
+        const {name,description,price,category} = req.body 
+        const updatedProduct = await productTable.findByIdAndUpdate(id, {name,description,price,category}, {new: true})
         if (!updatedProduct) {
             return res.status(404).json({message: "Product not found"})
         }

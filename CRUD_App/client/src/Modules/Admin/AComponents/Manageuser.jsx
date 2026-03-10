@@ -21,13 +21,14 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PersonIcon from "@mui/icons-material/Person";
+import axios from "axios";
 
 export default function Manageuser() {
   const [users, setUsers] = useState([]);
 
   // Edit Dialog State
   const [open, setOpen] = useState(false);
-  const [editIndex, setEditIndex] = useState(null);
+  const [editId, setEditId] = useState(null);
   const [editUser, setEditUser] = useState({
     name: "",
     email: "",
@@ -36,32 +37,48 @@ export default function Manageuser() {
     password: "",
   });
 
+  const fetchUsers = () => {
+    axios.get("http://localhost:7000/user/getusers")
+      .then((res) => {
+        setUsers(res.data.alluser);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("userdetails")) || [];
-    setUsers(stored);
+    fetchUsers();
   }, []);
 
   // Delete User
-  const handleDelete = (index) => {
-    const updated = users.filter((_, i) => i !== index);
-    setUsers(updated);
-    localStorage.setItem("userdetails", JSON.stringify(updated));
+  const handleDelete = (id) => {
+    axios.delete(`http://localhost:7000/user/deleteuserbyid/${id}`)
+      .then(() => {
+        fetchUsers();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   // Open Edit Dialog
-  const handleEdit = (index) => {
-    setEditIndex(index);
-    setEditUser(users[index]);
+  const handleEdit = (user) => {
+    setEditId(user._id);
+    setEditUser(user);
     setOpen(true);
   };
 
   // Update User
   const handleUpdate = () => {
-    const updatedUsers = [...users];
-    updatedUsers[editIndex] = editUser;
-    setUsers(updatedUsers);
-    localStorage.setItem("userdetails", JSON.stringify(updatedUsers));
-    setOpen(false);
+    axios.put(`http://localhost:7000/user/updateuser/${editId}`, editUser)
+      .then(() => {
+        setOpen(false);
+        fetchUsers();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -124,7 +141,7 @@ export default function Manageuser() {
               {users.length > 0 ? (
                 users.map((user, index) => (
                   <TableRow
-                    key={index}
+                    key={user._id}
                     sx={{
                       "&:hover": {
                         bgcolor: "rgba(102,126,234,0.05)",
@@ -161,7 +178,7 @@ export default function Manageuser() {
                       <IconButton
                         color="primary"
                         size="small"
-                        onClick={() => handleEdit(index)}
+                        onClick={() => handleEdit(user)}
                       >
                         <EditIcon />
                       </IconButton>
@@ -169,7 +186,7 @@ export default function Manageuser() {
                       <IconButton
                         color="error"
                         size="small"
-                        onClick={() => handleDelete(index)}
+                        onClick={() => handleDelete(user._id)}
                       >
                         <DeleteIcon />
                       </IconButton>

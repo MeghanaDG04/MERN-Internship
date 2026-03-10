@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import {Typography, Paper, TextField, Button, Checkbox, FormControlLabel, Box} from "@mui/material";
 import img1 from "./img1.jpg";
 import img3 from "./img3.jpg";
+import axios from "axios"
+
 
 export default function Register() {
   const [formdata, setFormdata] = useState({ name: "", email: "", password: "", phone: "", address: "", });
@@ -23,12 +25,17 @@ export default function Register() {
   };
 
   const handleregister = () => {
-    const existinguser =
-      JSON.parse(localStorage.getItem("userdetails")) || [];
-    const allusers = [...existinguser, formdata];
-    localStorage.setItem("userdetails", JSON.stringify(allusers));
-    alert("Registration successful!");
-    window.location.href = '/homepage';
+    console.log("Form data :", formdata)
+    axios.post('http://localhost:7000/user/registeruser',formdata)
+    .then((res)=>{
+      console.log("Registered User: ", res.data.udata);
+      alert("Registered Successfully..!!") 
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+    
+    //window.location.href = '/homepage';
   };
 
   return (

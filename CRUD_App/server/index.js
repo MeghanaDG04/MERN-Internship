@@ -1,5 +1,6 @@
 const express = require('express')
 const dbconnection = require('./db')
+const cors = require('cors')
 
 //express is a web framework which is responsible for handle incoming request and response.
 
@@ -27,6 +28,7 @@ app.get('/apitest',(req,res)=>{
     res.send('API is working fine') // response text from server
 })
 
+app.use(cors())
 app.use(express.json()) //middleware which is used to parse incoming request body in json format
 app.use('/user', require('./Routes/UserRoutes'))
 

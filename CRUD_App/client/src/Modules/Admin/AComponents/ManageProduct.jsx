@@ -7,6 +7,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import InventoryIcon from '@mui/icons-material/Inventory'
+import axios from 'axios'
 
 export default function ManageProduct() {
   const [products, setProducts] = useState([])
@@ -14,9 +15,19 @@ export default function ManageProduct() {
   const [success, setSuccess] = useState('')
   const [form, setForm] = useState({ name: '', price: '', category: '', description: '' })
 
+  const fetchProducts = () => {
+    axios.get('http://localhost:7000/product/getproducts')
+      .then((res) => {
+        console.log("Product fethed successfully!!");
+        setProducts(res.data.pdata)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem('products')) || []
-    setProducts(stored)
+    fetchProducts()
   }, [])
 
   const handleChange = (e) => {
@@ -25,20 +36,28 @@ export default function ManageProduct() {
 
   const handleAdd = () => {
     if (!form.name.trim() || !form.price) return
-    const newProduct = { ...form, id: Date.now() }
-    const updated = [...products, newProduct]
-    setProducts(updated)
-    localStorage.setItem('products', JSON.stringify(updated))
-    setForm({ name: '', price: '', category: '', description: '' })
-    setOpen(false)
-    setSuccess('Product added successfully!')
-    setTimeout(() => setSuccess(''), 3000)
+    axios.post('http://localhost:7000/product/addproduct', form)
+      .then((res) => {
+        console.log("Product added: ", res.data.pdata)
+        setForm({ name: '', price: '', category: '', description: '' })
+        setOpen(false)
+        setSuccess('Product added successfully!')
+        setTimeout(() => setSuccess(''), 3000)
+        fetchProducts()
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   const handleDelete = (id) => {
-    const updated = products.filter((p) => p.id !== id)
-    setProducts(updated)
-    localStorage.setItem('products', JSON.stringify(updated))
+    axios.delete(`http://localhost:7000/product/deleteproduct/${id}`)
+      .then(() => {
+        fetchProducts()
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   return (
@@ -87,7 +106,7 @@ export default function ManageProduct() {
             </TableHead>
             <TableBody>
               {products.length > 0 ? products.map((product, index) => (
-                <TableRow key={product.id} sx={{
+                <TableRow key={product._id} sx={{
                   '&:hover': { bgcolor: 'rgba(102,126,234,0.05)' },
                   transition: 'background 0.2s',
                 }}>
@@ -102,7 +121,7 @@ export default function ManageProduct() {
                   <TableCell>₹{product.price}</TableCell>
                   <TableCell>{product.description}</TableCell>
                   <TableCell align="center">
-                    <IconButton color="error" onClick={() => handleDelete(product.id)} size="small">
+                    <IconButton color="error" onClick={() => handleDelete(product._id)} size="small">
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>
