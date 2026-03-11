@@ -11,6 +11,7 @@ import ViewCategory from '../AComponents/ViewCategory'
 import ManageProduct from '../AComponents/ManageProduct'
 import Payment from '../AComponents/Payment'
 import Feedback from '../AComponents/Feedback'
+import ViewUser from '../AComponents/ViewUser'
 
 const drawerWidth = 260
 
@@ -59,6 +60,7 @@ function AdminLayout() {
           <Route path='/payments' element={<Payment />} />
           <Route path='/feedback' element={<Feedback />} />
           <Route path='/' element={<Navigate to='/admin/dashboard' replace />} />
+          <Route path='/viewuser' element={<ViewUser/>}/>
         </Routes>
       </Box>
     </Box>

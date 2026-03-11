@@ -17,9 +17,9 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+//import axios from "axios";
 
 export default function ViewCategory() {
   const [categories, setCategories] = useState([]);
@@ -28,6 +28,8 @@ export default function ViewCategory() {
   const [open, setOpen] = useState(false);
   const [editId, setEditId] = useState(null);
   const [editName, setEditName] = useState("");
+
+  
 
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("categories")) || [];
@@ -39,6 +41,14 @@ export default function ViewCategory() {
     const updated = categories.filter((cat) => cat.id !== id);
     setCategories(updated);
     localStorage.setItem("categories", JSON.stringify(updated));
+    // axios.delete(`http://localhost:7000/product/deleteproduct/${categories}`)
+    // .then(() => {
+
+    // })
+    // .catch((error) => {
+    //   console.log(error);
+    // })
+
   };
 
   // Open edit dialog
