@@ -33,4 +33,4 @@ app.use(express.json()) //middleware which is used to parse incoming request bod
 app.use('/user', require('./Routes/UserRoutes'))
 
 app.use('/product', require('./Routes/ProductRoutes'))
-
+app.use('/category',require('./Routes/CategoryRoutes'))
