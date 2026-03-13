@@ -26,7 +26,7 @@ const editProduct = async (req,res)=>{
     try {
         const {id} = req.params
         const {name,description,price,category} = req.body 
-        const updatedProduct = await productTable.findByIdAndUpdate(id, {name,description,price,category}, {new: true})
+        const updatedProduct = await productTable.findByIdAndUpdate(id, {name,description,price,category}, {returnDocument: 'after'})
         if (!updatedProduct) {
             return res.status(404).json({message: "Product not found"})
         }

@@ -1,21 +1,36 @@
 import React, { useState } from 'react'
 import { Box, Typography, Paper, TextField, Button, Alert } from '@mui/material'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import axios from 'axios'
 
 export default function AddCategory() {
+
   const [category, setCategory] = useState('')
-  const [success, setSuccess] = useState(false)
+  const [description, setDescription] = useState('')
+  const [success, setSuccess] = useState('')
+  const [error, setError] = useState('')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!category.trim()) return
 
-    const existing = JSON.parse(localStorage.getItem('categories')) || []
-    existing.push({ name: category.trim(), id: Date.now() })
-    localStorage.setItem('categories', JSON.stringify(existing))
-    setCategory('')
-    setSuccess(true)
-    setTimeout(() => setSuccess(false), 3000)
+    try {
+
+      const res = await axios.post(
+        "http://localhost:7000/category/addcategory",
+        { category, description }
+      )
+
+      setSuccess(res.data.message)
+      setError('')
+      setCategory('')
+      setDescription('')
+
+      setTimeout(() => setSuccess(''), 7000)
+
+    } catch (err) {
+      setError(err.response?.data?.message || "Something went wrong")
+      setSuccess('')
+    }
   }
 
   return (
@@ -28,31 +43,46 @@ export default function AddCategory() {
         textAlign: 'center',
       }}>
         <AddCircleOutlineIcon sx={{ fontSize: 48, color: '#667eea', mb: 2 }} />
+
         <Typography variant="h5" fontWeight={700} mb={1}>
           Add Category
         </Typography>
-        <Typography variant="body2" color="text.secondary" mb={3}>
-          Create a new category for your system
-        </Typography>
 
-        {success && <Alert severity="success" sx={{ mb: 2 }}>Category added successfully!</Alert>}
+        {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
+        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
         <form onSubmit={handleSubmit}>
+
           <TextField
-            fullWidth label="Category Name" variant="outlined"
-            value={category} onChange={(e) => setCategory(e.target.value)}
-            required sx={{ mb: 3 }}
+            fullWidth
+            label="Category Name"
+            value={category}
+            onChange={(e)=>setCategory(e.target.value)}
+            required
+            sx={{ mb: 2 }}
           />
+
+          <TextField
+            fullWidth
+            label="Description"
+            value={description}
+            onChange={(e)=>setDescription(e.target.value)}
+            sx={{ mb: 3 }}
+          />
+
           <Button
-            type="submit" fullWidth variant="contained" size="large"
+            type="submit"
+            fullWidth
+            variant="contained"
+            size="large"
             sx={{
-              py: 1.5, borderRadius: 50, fontWeight: 700, fontSize: '1rem',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              '&:hover': { background: 'linear-gradient(135deg, #5a6fd6 0%, #6a4190 100%)' },
+              py: 1.5, borderRadius: 50, fontWeight: 700,
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
             }}
           >
             Add Category
           </Button>
+
         </form>
       </Paper>
     </Box>
