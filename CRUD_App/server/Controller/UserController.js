@@ -12,6 +12,38 @@ const registerUser = async (req,res)=>{
     }
 }
 
+// LOGIN USER
+const loginUser = async (req,res)=>{
+    try {
+        const {email, password} = req.body
+
+        // ⭐ Find user by email OR name
+        const user = await usertable.findOne({
+            $or: [
+                { email: email },
+                { name: email }   // here email field from frontend can contain name
+            ]
+        })
+
+        if(!user){
+            return res.status(401).json({message:"User not found"})
+        }
+
+        if(user.password !== password){
+            return res.status(401).json({message:"Wrong password"})
+        }
+
+        res.status(200).json({
+            message:"Login successful",
+            udata:user
+        })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({message:"Server error"})
+    }
+}
+
+
 const getUsers = async (req,res)=>{
     try {
         const getAllUsers = await usertable.find()
@@ -58,4 +90,4 @@ const updateUser = async(req, res)=>{
     }
 }
     
-module.exports = { registerUser, getUsers, getUserById, deleteUser, updateUser }
+module.exports = { registerUser, loginUser ,getUsers, getUserById, deleteUser, updateUser }
