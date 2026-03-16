@@ -7,6 +7,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import Button from '@mui/material/Button';
 
 export default function ViewUser() {
     const [users, setUsers] = useState([]);
@@ -22,7 +23,23 @@ export default function ViewUser() {
         })
 
     })
-  return (
+
+    const handleDelete = (uid) => {
+      axios.delete(`http://localhost:7000/user/deleteuserbyid/${uid}`)
+    .then((res)=> {
+      console.log(res)
+      alert("USER DELETED..!!")
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+    }
+
+    const handleUpdate=() => {
+
+    }
+
+    return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
@@ -32,6 +49,7 @@ export default function ViewUser() {
             <TableCell align="center">EMAIL</TableCell>
             <TableCell align="center">PHONE</TableCell>
             <TableCell align="center">ADDRESS</TableCell>
+            <TableCell align=''>ACTION</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -46,6 +64,11 @@ export default function ViewUser() {
               <TableCell align="center">{row.email}</TableCell>
               <TableCell align="center">{row.phone}</TableCell>
               <TableCell align="center">{row.address}</TableCell>
+              <TableCell> 
+                <Button variant='outlined' onClick={()=>handleUpdate(row._id)}>UPDATE</Button>
+                <Button variant='outlined' onClick={()=>handleDelete(row._id)} >DELETE</Button>
+              </TableCell>
+
             </TableRow>
           ))}
         </TableBody>
