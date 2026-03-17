@@ -110,30 +110,13 @@ export default function Manageuser() {
                     "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                 }}
               >
-                <TableCell sx={{ color: "#fff", fontWeight: 700 }}>
-                  #
-                </TableCell>
-                <TableCell sx={{ color: "#fff", fontWeight: 700 }}>
-                  Name
-                </TableCell>
-                <TableCell sx={{ color: "#fff", fontWeight: 700 }}>
-                  Email
-                </TableCell>
-                <TableCell sx={{ color: "#fff", fontWeight: 700 }}>
-                  Phone
-                </TableCell>
-                <TableCell sx={{ color: "#fff", fontWeight: 700 }}>
-                  Address
-                </TableCell>
-                <TableCell sx={{ color: "#fff", fontWeight: 700 }}>
-                  Password
-                </TableCell>
-                <TableCell
-                  sx={{ color: "#fff", fontWeight: 700 }}
-                  align="center"
-                >
-                  Action
-                </TableCell>
+                <TableCell sx={{ color: "#fff", fontWeight: 700 }}> # </TableCell>
+                <TableCell sx={{ color: "#fff", fontWeight: 700 }}> Name </TableCell>
+                <TableCell sx={{ color: "#fff", fontWeight: 700 }}> Email </TableCell>
+                <TableCell sx={{ color: "#fff", fontWeight: 700 }}> Phone </TableCell>
+                <TableCell sx={{ color: "#fff", fontWeight: 700 }}> Address </TableCell>
+                <TableCell sx={{ color: "#fff", fontWeight: 700 }}> Password </TableCell>
+                <TableCell sx={{ color: "#fff", fontWeight: 700 }} align="center" > Action </TableCell>
               </TableRow>
             </TableHead>
 

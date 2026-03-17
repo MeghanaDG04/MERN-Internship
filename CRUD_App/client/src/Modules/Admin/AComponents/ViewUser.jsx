@@ -8,6 +8,7 @@ import Paper from '@mui/material/Paper';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
 
 export default function ViewUser() {
     const [users, setUsers] = useState([]);
@@ -33,10 +34,6 @@ export default function ViewUser() {
     .catch((error) => {
       console.error(error)
     })
-    }
-
-    const handleUpdate=() => {
-
     }
 
     return (
@@ -65,8 +62,8 @@ export default function ViewUser() {
               <TableCell align="center">{row.phone}</TableCell>
               <TableCell align="center">{row.address}</TableCell>
               <TableCell> 
-                <Button variant='outlined' onClick={()=>handleUpdate(row._id)}>UPDATE</Button>
-                <Button variant='outlined' onClick={()=>handleDelete(row._id)} >DELETE</Button>
+                <Button variant='contained' color='success' component={Link} to={`/admin/updateuser/${row._id}`}>UPDATE</Button>
+                <Button variant='contained' color='error' onClick={()=>handleDelete(row._id)} >DELETE</Button>
               </TableCell>
 
             </TableRow>

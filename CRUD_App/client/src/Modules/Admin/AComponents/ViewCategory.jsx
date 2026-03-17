@@ -18,10 +18,11 @@ export default function ViewCategory() {
   const [newCategory, setNewCategory] = useState("");
   const [newDescription, setNewDescription] = useState("");
 
-  // ✅ FETCH FROM MONGODB
+  //  FETCH FROM MONGODB
   const fetchCategories = () => {
     axios.get("http://localhost:7000/category/getCategory")
       .then((res) => {
+        console.log("Fetch Categories Response:", res.data);
         setCategories(res.data.cdata);
       })
       .catch((err) => {
@@ -33,10 +34,11 @@ export default function ViewCategory() {
     fetchCategories();
   }, []);
 
-  // ✅ DELETE CATEGORY
+  //  DELETE CATEGORY
   const handleDelete = (name) => {
     axios.delete(`http://localhost:7000/category/deletecategory/${name}`)
-      .then(() => {
+      .then((res) => {
+        console.log("Delete Category Response:", res.data);
         fetchCategories();
       })
       .catch((err) => {
@@ -44,23 +46,24 @@ export default function ViewCategory() {
       });
   };
 
-  // ✅ OPEN EDIT
+  //  OPEN EDIT
   const handleEdit = (cat) => {
   setOldCategory(cat.category);
   setNewCategory(cat.category);
   setNewDescription(cat.description);
   setOpen(true);
 };
-  // ✅ UPDATE CATEGORY
+  // UPDATE CATEGORY
   const handleUpdate = () => {
   axios.put("http://localhost:7000/category/updatecategory", {
     oldCategory,
     newCategory,
     description: newDescription
   })
-  .then(() => {
+  .then((res) => {
     setOpen(false);
     fetchCategories();
+    console.log(res.data);
   })
   .catch((err) => {
     console.log(err);
@@ -94,7 +97,6 @@ export default function ViewCategory() {
           categories.map((cat, index) => (
             <TableRow key={cat._id}>
               <TableCell>{index + 1}</TableCell>
-
               <TableCell>{cat.category}</TableCell>
               <TableCell>{cat.description}</TableCell>
 
@@ -132,7 +134,7 @@ export default function ViewCategory() {
 
       </Paper>
 
-      {/* EDIT DIALOG */}
+      {/* Edit Category*/}
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
 
         <DialogTitle>Edit Category</DialogTitle>

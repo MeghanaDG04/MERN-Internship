@@ -14,7 +14,7 @@ const addCategory = async (req,res)=>{
     }
 }
 
-// GET UNIQUE CATEGORIES
+// GET CATEGORIES
 const getCategories = async (req,res)=>{
     try{
         const data = await categoryTable.find()
@@ -32,13 +32,7 @@ const updateCategory = async (req,res)=>{
         const {oldCategory, newCategory, description} = req.body
         await categoryTable.updateMany(
             {category: oldCategory},
-            {
-              $set:{
-                category: newCategory,
-                description: description
-              }
-            }
-        )
+            { $set:{ category: newCategory, description: description }})
         res.status(200).json({message:"Category updated"})
     }catch(error){
         console.log(error)
@@ -59,4 +53,17 @@ const deleteCategory = async (req,res)=>{
     }
 }
 
-module.exports = {addCategory, getCategories, updateCategory, deleteCategory}
+//Get Unique Category
+const getCategoryById = async(req,res) =>{
+    try {
+        const cid = req.params.id
+        console.log(cid);
+        const singlecategory = await categoryTable.findById(cid)
+        res.status(200).json({ message:"Category Fetched" })
+    } catch (error) {
+        console.error("Error deleting category:", error)
+        res.status(500).json({message:"Server error", error})
+    }
+}
+
+module.exports = {addCategory, getCategories, updateCategory, deleteCategory, getCategoryById}

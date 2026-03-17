@@ -16,23 +16,15 @@ const registerUser = async (req,res)=>{
 const loginUser = async (req,res)=>{
     try {
         const {email, password} = req.body
-
-        // ⭐ Find user by email OR name
+        // Find user by email OR name
         const user = await usertable.findOne({
-            $or: [
-                { email: email },
-                { name: email }   // here email field from frontend can contain name
-            ]
-        })
-
+            $or: [ { email: email }, { name: email } ] })
         if(!user){
             return res.status(401).json({message:"User not found"})
         }
-
         if(user.password !== password){
             return res.status(401).json({message:"Wrong password"})
         }
-
         res.status(200).json({
             message:"Login successful",
             udata:user
