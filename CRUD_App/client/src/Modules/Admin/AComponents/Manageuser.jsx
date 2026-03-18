@@ -34,7 +34,7 @@ export default function Manageuser() {
     email: "",
     phone: "",
     address: "",
-    password: "",
+   // password: "",
   });
 
   const fetchUsers = () => {
@@ -72,7 +72,9 @@ export default function Manageuser() {
   // Update User
   const handleUpdate = () => {
     axios.put(`http://localhost:7000/user/updateuser/${editId}`, editUser)
-      .then(() => {
+      .then((res) => {
+        console.log(res.data.userupdate);
+
         setOpen(false);
         fetchUsers();
       })
@@ -115,7 +117,7 @@ export default function Manageuser() {
                 <TableCell sx={{ color: "#fff", fontWeight: 700 }}> Email </TableCell>
                 <TableCell sx={{ color: "#fff", fontWeight: 700 }}> Phone </TableCell>
                 <TableCell sx={{ color: "#fff", fontWeight: 700 }}> Address </TableCell>
-                <TableCell sx={{ color: "#fff", fontWeight: 700 }}> Password </TableCell>
+                {/* <TableCell sx={{ color: "#fff", fontWeight: 700 }}> Password </TableCell> */}
                 <TableCell sx={{ color: "#fff", fontWeight: 700 }} align="center" > Action </TableCell>
               </TableRow>
             </TableHead>
@@ -155,7 +157,7 @@ export default function Manageuser() {
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.phone}</TableCell>
                     <TableCell>{user.address}</TableCell>
-                    <TableCell>{user.password}</TableCell>
+                    {/* <TableCell>{user.password}</TableCell> */}
 
                     <TableCell align="center">
                       <IconButton
@@ -195,52 +197,12 @@ export default function Manageuser() {
         <DialogTitle>Edit User</DialogTitle>
 
         <DialogContent
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-            mt: 1,
-          }}
-        >
-          <TextField
-            label="Name"
-            value={editUser.name}
-            onChange={(e) =>
-              setEditUser({ ...editUser, name: e.target.value })
-            }
-          />
-
-          <TextField
-            label="Email"
-            value={editUser.email}
-            onChange={(e) =>
-              setEditUser({ ...editUser, email: e.target.value })
-            }
-          />
-
-          <TextField
-            label="Phone"
-            value={editUser.phone}
-            onChange={(e) =>
-              setEditUser({ ...editUser, phone: e.target.value })
-            }
-          />
-
-          <TextField
-            label="Address"
-            value={editUser.address}
-            onChange={(e) =>
-              setEditUser({ ...editUser, address: e.target.value })
-            }
-          />
-
-          <TextField
-            label="Password"
-            value={editUser.password}
-            onChange={(e) =>
-              setEditUser({ ...editUser, password: e.target.value })
-            }
-          />
+          sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1, }} >
+          <TextField label="Name" value={editUser.name} onChange={(e) => setEditUser({ ...editUser, name: e.target.value })} />
+          <TextField label="Email" value={editUser.email} onChange={(e) => setEditUser({ ...editUser, email: e.target.value }) } />
+          <TextField label="Phone" value={editUser.phone} onChange={(e) => setEditUser({ ...editUser, phone: e.target.value }) } />
+          <TextField label="Address" value={editUser.address} onChange={(e) => setEditUser({ ...editUser, address: e.target.value }) } />
+          {/* <TextField label="Password" value={editUser.password} onChange={(e) => setEditUser({ ...editUser, password: e.target.value }) } /> */}
         </DialogContent>
 
         <DialogActions>

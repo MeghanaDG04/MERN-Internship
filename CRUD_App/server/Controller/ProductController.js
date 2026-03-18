@@ -2,8 +2,8 @@ const productTable = require('../Models/ProductModel');
 
 const addProduct = async (req,res)=>{
     try {
-        const {name,description,price,category} = req.body 
-        const productDetails = new productTable({name,description,price,category})
+        const {name,description,price,quantity,category} = req.body 
+        const productDetails = new productTable({name,description,price,quantity,category})
         await productDetails.save()
         res.status(201).json({message: "Product added successfully", pdata: productDetails})
     } catch (error) {
@@ -14,7 +14,7 @@ const addProduct = async (req,res)=>{
 
 const getProducts = async (req,res)=>{
     try {
-        const products = await productTable.find()
+        const products = await productTable.find().populate('category')
         res.status(200).json({message: "Products retrieved successfully", pdata: products})
     } catch (error) {
         console.error("Error retrieving products:", error)
@@ -25,8 +25,8 @@ const getProducts = async (req,res)=>{
 const editProduct = async (req,res)=>{
     try {
         const {id} = req.params
-        const {name,description,price,category} = req.body 
-        const updatedProduct = await productTable.findByIdAndUpdate(id, {name,description,price,category}, {returnDocument: 'after'})
+        const {name,description,price,quantity,category} = req.body 
+        const updatedProduct = await productTable.findByIdAndUpdate(id, {name,description,price,quantity,category}, {returnDocument: 'after'}).populate('category')
         if (!updatedProduct) {
             return res.status(404).json({message: "Product not found"})
         }

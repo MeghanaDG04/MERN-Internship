@@ -29,11 +29,10 @@ const getCategories = async (req,res)=>{
 // UPDATE CATEGORY (update all products with that category)
 const updateCategory = async (req,res)=>{
     try{
-        const {oldCategory, newCategory, description} = req.body
-        await categoryTable.updateMany(
-            {category: oldCategory},
-            { $set:{ category: newCategory, description: description }})
-        res.status(200).json({message:"Category updated"})
+        const cid = req.params.id
+        const {newCategory, description} = req.body
+        const updated = await categoryTable.findByIdAndUpdate(cid, { category:newCategory, description }, { new:true })
+        res.status(200).json({ message:"Category updated successfully", cdata: updated })
     }catch(error){
         console.log(error)
         res.status(500).json({message:"Server error"})
@@ -57,12 +56,11 @@ const deleteCategory = async (req,res)=>{
 const getCategoryById = async(req,res) =>{
     try {
         const cid = req.params.id
-        console.log(cid);
         const singlecategory = await categoryTable.findById(cid)
-        res.status(200).json({ message:"Category Fetched" })
+        res.status(200).json({ message:"Category Fetched", cdata: singlecategory })
     } catch (error) {
-        console.error("Error deleting category:", error)
-        res.status(500).json({message:"Server error", error})
+        console.error(error)
+        res.status(500).json({message:"Server error"})
     }
 }
 

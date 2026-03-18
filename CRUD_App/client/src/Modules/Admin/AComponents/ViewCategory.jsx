@@ -13,6 +13,7 @@ export default function ViewCategory() {
 
   const [categories, setCategories] = useState([]);
 
+  const [cid, setCid] = useState("")
   const [open, setOpen] = useState(false);
   const [oldCategory, setOldCategory] = useState("");
   const [newCategory, setNewCategory] = useState("");
@@ -38,8 +39,8 @@ export default function ViewCategory() {
   const handleDelete = (name) => {
     axios.delete(`http://localhost:7000/category/deletecategory/${name}`)
       .then((res) => {
-        console.log("Delete Category Response:", res.data);
-        fetchCategories();
+        console.log(res.data.cdata);
+        //fetchCategories();
       })
       .catch((err) => {
         console.log(err);
@@ -48,14 +49,15 @@ export default function ViewCategory() {
 
   //  OPEN EDIT
   const handleEdit = (cat) => {
-  setOldCategory(cat.category);
-  setNewCategory(cat.category);
-  setNewDescription(cat.description);
-  setOpen(true);
-};
+    setCid(cat._id)
+    setOldCategory(cat.category)
+    setNewCategory(cat.category)
+    setNewDescription(cat.description)
+    setOpen(true)
+  };
   // UPDATE CATEGORY
   const handleUpdate = () => {
-  axios.put("http://localhost:7000/category/updatecategory", {
+    axios.put(`http://localhost:7000/category/updatecategory/${cid}`, {
     oldCategory,
     newCategory,
     description: newDescription
@@ -63,7 +65,7 @@ export default function ViewCategory() {
   .then((res) => {
     setOpen(false);
     fetchCategories();
-    console.log(res.data);
+    console.log(res.data.cdata);
   })
   .catch((err) => {
     console.log(err);
