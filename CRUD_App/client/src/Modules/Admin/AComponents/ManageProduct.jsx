@@ -27,7 +27,8 @@ export default function ManageProduct() {
     price: '',
     quantity: '',
     category: '',
-    description: ''
+    description: '',
+    productimage:''
   })
 
   // FETCH PRODUCTS
@@ -54,7 +55,11 @@ export default function ManageProduct() {
   }, [])
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
+    if (e.target.name === 'productimage') {
+      setForm({ ...form, productimage: e.target.files[0] })
+    } else {
+      setForm({ ...form, [e.target.name]: e.target.value })
+    }
   }
 
   const handleEdit = (product) => {
@@ -87,13 +92,14 @@ export default function ManageProduct() {
         .catch(err => console.log(err))
 
     } else {
-      axios.post('http://localhost:7000/product/addproduct', form)
+      axios.post('http://localhost:7000/product/addproduct', form,
+          {headers:{"Content-Type":'multipart/form-data'}})
         .then((res) => {
           setSuccess("Product added successfully!")
           console.log("New Product:", res.data.pdata)
           setTimeout(() => setSuccess(''), 3000)
           setOpen(false)
-          setForm({ name: '', price: '', quantity:'', category: '', description: '' })
+          setForm({ name: '', price: '', quantity:'', category: '', description: '', productimage: ''})
           fetchProducts()
         })
         .catch(err => console.log(err))
@@ -143,6 +149,7 @@ export default function ManageProduct() {
                 <TableCell>Price</TableCell>
                 <TableCell>Quantity</TableCell>
                 <TableCell>Description</TableCell>
+                <TableCell>Image</TableCell>
                 <TableCell align="center">Action</TableCell>
               </TableRow>
             </TableHead>
@@ -165,6 +172,17 @@ export default function ManageProduct() {
                     <TableCell>₹{product.price}</TableCell>
                     <TableCell>{product.quantity}</TableCell>
                     <TableCell>{product.description}</TableCell>
+                    <TableCell>
+                        {product.productimage && (
+                          <img
+                            src={`http://localhost:7000/image/${product.productimage}`}
+                            alt="product"
+                            width="60"
+                            height="60"
+                            style={{ objectFit: "cover", borderRadius: "6px" }}
+                          />
+                        )}
+                      </TableCell>
 
                     <TableCell align="center">
                       <IconButton color="primary" onClick={() => handleEdit(product)}>
@@ -236,6 +254,17 @@ export default function ManageProduct() {
 
           <TextField
             fullWidth
+            type='file'
+            //label='productimage'
+            name='productimage'
+            //value={form.productimage}
+            onChange={handleChange}
+            InputLabelProps={{shrink:true}}
+            sx={{ mb: 2 }}
+          />
+
+          <TextField
+            fullWidth
             type='number'
             label='quantity'
             name='quantity'
@@ -243,6 +272,7 @@ export default function ManageProduct() {
             onChange={handleChange}
             sx={{ mb: 2 }}
           />
+
 
           <TextField
             fullWidth

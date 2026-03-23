@@ -34,3 +34,5 @@ app.use('/user', require('./Routes/UserRoutes'))
 
 app.use('/product', require('./Routes/ProductRoutes'))
 app.use('/category',require('./Routes/CategoryRoutes'))
+
+app.use('/image', express.static("./Uploads"))
