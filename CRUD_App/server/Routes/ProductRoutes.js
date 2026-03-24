@@ -8,7 +8,7 @@ route.post("/addproduct", upload.single('productimage'), addProduct)
 
 //route.post('/addproduct', addProduct)
 route.get('/getproducts', getProducts)
-route.put('/editproduct/:id', editProduct)
+route.put('/editproduct/:id',upload.single('productimage'), editProduct)
 route.delete('/deleteproduct/:id', deleteProduct)
 
 module.exports = route

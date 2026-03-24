@@ -68,7 +68,8 @@ export default function ManageProduct() {
       price: product.price,
       quantity: product.quantity,
       category: product.category?._id,
-      description: product.description
+      description: product.description,
+      productimage: ''
     })
     setEditId(product._id)
     setOpen(true)
@@ -79,14 +80,15 @@ export default function ManageProduct() {
     if (!form.name.trim() || !form.price) return
 
     if (editId) {
-      axios.put(`http://localhost:7000/product/editproduct/${editId}`, form)
+      axios.put(`http://localhost:7000/product/editproduct/${editId}`, form,
+          {headers:{"Content-Type":'multipart/form-data'}})
         .then((res) => {
           setSuccess("Product updated successfully!")
           console.log("Updated Product:", res.data.pdata)
           setTimeout(() => setSuccess(''), 3000)
           setOpen(false)
           setEditId(null)
-          setForm({ name: '', price: '', quantity:'', category: '', description: '' })
+          setForm({ name: '', price: '', quantity:'', category: '', description: '', productimage:'' })
           fetchProducts()
         })
         .catch(err => console.log(err))

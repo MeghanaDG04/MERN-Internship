@@ -23,18 +23,28 @@ const getProducts = async (req,res)=>{
     }
 }
 
-const editProduct = async (req,res)=>{
+const editProduct = async (req, res) => {
     try {
-        const {id} = req.params
-        const {name,description,price,quantity,category} = req.body 
-        const updatedProduct = await productTable.findByIdAndUpdate(id, {name,description,price,quantity,category}, {returnDocument: 'after'}).populate('category')
-        if (!updatedProduct) {
-            return res.status(404).json({message: "Product not found"})
+        const { id } = req.params
+        const { name, description, price, quantity, category } = req.body
+        const product = await productTable.findById(id)
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" })
         }
-        res.status(200).json({message: "Product updated successfully", pdata: updatedProduct})
+        // update fields
+        product.name = name
+        product.description = description
+        product.price = price
+        product.quantity = quantity
+        product.category = category
+        // update image only if new file uploaded
+        if (req.file) { product.productimage = req.file.filename }
+        await product.save()
+        const updatedProduct = await productTable.findById(id).populate('category')
+        res.status(200).json({ message: "Product updated successfully", pdata: updatedProduct })
     } catch (error) {
         console.error("Error updating product:", error)
-        res.status(500).json({message: "Server error", error})
+        res.status(500).json({ message: "Server error", error })
     }
 }
 
