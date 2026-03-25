@@ -12,7 +12,10 @@ import {
   Button,
   Container,
   Paper,
-  Rating,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select
 } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -27,27 +30,57 @@ import axios from "axios";
 import img4 from "./img4.jpg";
 
 export default function UserHomeProducts() {
+
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);   // ✅ array
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const defaultImage = img4;
 
-  const fetchProducts = () => {
-    axios
-      .get("http://localhost:7000/product/getproducts")
-      .then((res) => setProducts(res.data.pdata || []))
-      .catch((err) => console.log(err));
+  // ---------------- FETCH PRODUCTS ----------------
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get("http://localhost:7000/product/getproducts");
+      setProducts(res.data.pdata || []);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // ---------------- FETCH CATEGORY ----------------
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get("http://localhost:7000/category/getCategory");
+      setCategories(res.data.cdata || []);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
     fetchProducts();
+    
+    fetchCategories();
   }, []);
 
+
+  
+  // ---------------- FILTER LOGIC ----------------
   const filteredProducts = products.filter((p) => {
+
     const name = p?.name?.toLowerCase() || "";
-    const category = p?.category?.category?.toLowerCase() || "";
+    const catName = p?.category?.category?.toLowerCase() || "";
     const search = searchTerm.toLowerCase();
-    return name.includes(search) || category.includes(search);
+
+    const searchMatch =
+      name.includes(search) || catName.includes(search);
+
+    const categoryMatch =
+      selectedCategory === "All" ||
+      p?.category?._id === selectedCategory;
+
+    return searchMatch && categoryMatch;
   });
 
   const highlights = [
@@ -57,9 +90,11 @@ export default function UserHomeProducts() {
     { icon: <TrendingUpIcon />, title: "Trending", desc: "Top picks for you" },
   ];
 
+  //const filterProducts = selectedCategory === "All" ? products : products.filter((p) => p.category === selectedCategory);
+
   return (
     <Box sx={{ minHeight: "100vh", background: "#f0f2f5" }}>
-      
+
       {/* HERO */}
       <Box
         sx={{
@@ -105,7 +140,7 @@ export default function UserHomeProducts() {
       </Container>
 
       <Container maxWidth="xl" sx={{ py: 4 }}>
-        
+
         {/* SEARCH */}
         <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
           <TextField
@@ -125,23 +160,33 @@ export default function UserHomeProducts() {
           <Chip label={`${filteredProducts.length} Products`} color="primary" />
         </Box>
 
+        {/* CATEGORY DROPDOWN */}
+        <FormControl fullWidth sx={{ mb: 3 }}>
+          <InputLabel>Category</InputLabel>
+          <Select
+            label="Category"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <MenuItem value="All">All</MenuItem>
+
+            {categories.map((cat) => (
+              <MenuItem key={cat._id} value={cat._id}>
+                {cat.category}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
         <Typography variant="h5" fontWeight={700} mb={3}>
           All Products
         </Typography>
 
-        {/* ⭐ MAIN GRID FIX */}
+        {/* PRODUCT GRID */}
         <Grid container spacing={3} alignItems="stretch">
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={3}
-                key={product._id}
-                sx={{ display: "flex" }}
-              >
+              <Grid item xs={12} sm={6} md={4} lg={3} key={product._id} sx={{ display: "flex" }}>
                 <Card
                   sx={{
                     width: "100%",
@@ -157,7 +202,6 @@ export default function UserHomeProducts() {
                     },
                   }}
                 >
-                  {/* IMAGE */}
                   <CardMedia
                     component="img"
                     height="220"
@@ -169,14 +213,7 @@ export default function UserHomeProducts() {
                     alt={product.name}
                   />
 
-                  {/* CONTENT FLEX */}
-                  <CardContent
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      flexGrow: 1,
-                    }}
-                  >
+                  <CardContent sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
                     <Chip
                       label={product.category?.category || "General"}
                       size="small"
@@ -187,13 +224,10 @@ export default function UserHomeProducts() {
                       {product.name}
                     </Typography>
 
-                    <Rating value={4} readOnly size="small" />
-
                     <Typography variant="h6" color="primary">
                       ₹{product.price}
                     </Typography>
 
-                    {/* ⭐ DESCRIPTION LIMIT */}
                     <Typography
                       variant="body2"
                       color="text.secondary"
@@ -208,7 +242,6 @@ export default function UserHomeProducts() {
                       {product.description}
                     </Typography>
 
-                    {/* ⭐ BUTTON ALWAYS BOTTOM */}
                     <Button
                       fullWidth
                       variant="contained"
@@ -225,13 +258,12 @@ export default function UserHomeProducts() {
             <Grid item xs={12}>
               <Paper sx={{ textAlign: "center", py: 6 }}>
                 <Inventory2Outlined sx={{ fontSize: 60 }} />
-                <Typography variant="h5">
-                  No Products Available
-                </Typography>
+                <Typography variant="h5">No Products Available</Typography>
               </Paper>
             </Grid>
           )}
         </Grid>
+
       </Container>
     </Box>
   );

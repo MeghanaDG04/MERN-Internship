@@ -43,12 +43,12 @@ const updateCategory = async (req,res)=>{
 // DELETE CATEGORY (delete all products of that category)
 const deleteCategory = async (req,res)=>{
     try{
-        const {name} = req.params
-        await categoryTable.deleteMany({category:name})
+        const {id} = req.params
+        await categoryTable.findByIdAndDelete(id)
         res.status(200).json({ message:"Category deleted successfully" })
     }catch(error){
-        console.error("Error deleting category:", error)
-        res.status(500).json({message:"Server error", error})
+        console.error(error)
+        res.status(500).json({message:"Server error"})
     }
 }
 

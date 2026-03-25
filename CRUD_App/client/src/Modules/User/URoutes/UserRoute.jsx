@@ -1,19 +1,35 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 //import UHome from '../UComponents/UHome'
 import Topbar from '../UComponents/Topbar'
 import AboutPage from '../UComponents/AboutPage'
 import HomePage from '../UComponents/HomePage'
+import Login from '../UComponents/Login'
+import Register from '../UComponents/Register'
+
+
+
+function AppContent(){
+  const location = useLocation()
+  const hideTopBar = ["/login", "/register"]
+  return (
+    <div>
+      {!hideTopBar.includes(location.pathname) && <Topbar/>}
+      <Routes>
+          {/* <Route path='/uhome' element={<UHome/>} /> */}
+          <Route path='/about' element={<AboutPage/>} />
+          <Route path='/homepage' element={<HomePage/>} />
+          <Route path='/login' element={<Login/>}/>
+          <Route path='/register' element={<Register/>}/>
+      </Routes>
+    </div>
+  )
+}
 
 export default function UserRoute() {
   return (
     <div>
-        <Topbar/>
-        <Routes>
-            {/* <Route path='/uhome' element={<UHome/>} /> */}
-            <Route path='/about' element={<AboutPage/>} />
-            <Route path='/homepage' element={<HomePage/>} />
-        </Routes>
+        <AppContent/>
     </div>
   )
 }

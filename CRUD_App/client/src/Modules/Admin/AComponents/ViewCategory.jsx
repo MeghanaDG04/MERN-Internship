@@ -36,11 +36,11 @@ export default function ViewCategory() {
   }, []);
 
   //  DELETE CATEGORY
-  const handleDelete = (name) => {
-    axios.delete(`http://localhost:7000/category/deletecategory/${name}`)
+  const handleDelete = (id) => {
+    axios.delete(`http://localhost:7000/category/deletecategory/${id}`)
       .then((res) => {
         console.log(res.data.cdata);
-        //fetchCategories();
+        fetchCategories();
       })
       .catch((err) => {
         console.log(err);
@@ -113,7 +113,7 @@ export default function ViewCategory() {
 
                 <IconButton
                   color="error"
-                  onClick={() => handleDelete(cat.category)}
+                  onClick={() => handleDelete(cat._id)}
                 >
                   <DeleteIcon />
                 </IconButton>
