@@ -21,6 +21,7 @@ function AppContent(){
           <Route path='/homepage' element={<HomePage/>} />
           <Route path='/login' element={<Login/>}/>
           <Route path='/register' element={<Register/>}/>
+          <Route path='/viewsingleproduct' element={<ViewSingleProduct/>}/>
       </Routes>
     </div>
   )
