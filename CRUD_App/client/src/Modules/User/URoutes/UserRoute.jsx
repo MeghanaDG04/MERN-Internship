@@ -6,6 +6,7 @@ import AboutPage from '../UComponents/AboutPage'
 import HomePage from '../UComponents/HomePage'
 import Login from '../UComponents/Login'
 import Register from '../UComponents/Register'
+import ViewSingleProduct from '../UComponents/ViewSingleProduct'
 
 
 
@@ -21,7 +22,7 @@ function AppContent(){
           <Route path='/homepage' element={<HomePage/>} />
           <Route path='/login' element={<Login/>}/>
           <Route path='/register' element={<Register/>}/>
-          <Route path='/viewsingleproduct' element={<ViewSingleProduct/>}/>
+          <Route path='/viewsingleproduct/:id' element={<ViewSingleProduct/>}/>
       </Routes>
     </div>
   )

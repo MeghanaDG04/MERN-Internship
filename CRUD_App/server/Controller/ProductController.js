@@ -62,4 +62,20 @@ const deleteProduct = async (req,res)=>{
     }
 }   
 
-module.exports = {addProduct, getProducts, editProduct, deleteProduct}
+const getSingleProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await productTable.findById(id).populate('category');
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.status(200).json({ pdata: product });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = {addProduct, getProducts, editProduct, deleteProduct,getSingleProduct}
