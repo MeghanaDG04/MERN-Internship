@@ -112,11 +112,11 @@ export default function ViewSingleProduct() {
               color="secondary"
               sx={{ fontWeight: 600 }}
             />
-            <Chip
+            {/* <Chip
               label="20% OFF"
               color="success"
               sx={{ fontWeight: 600 }}
-            />
+            /> */}
           </Box>
 
           {/* NAME */}
@@ -138,12 +138,12 @@ export default function ViewSingleProduct() {
               ₹{product.price}
             </Typography>
 
-            <Typography
+            {/* <Typography
               variant="body2"
               sx={{ textDecoration: "line-through", color: "gray" }}
             >
               ₹{product.price + 500}
-            </Typography>
+            </Typography> */}
           </Box>
 
           {/* DESCRIPTION */}

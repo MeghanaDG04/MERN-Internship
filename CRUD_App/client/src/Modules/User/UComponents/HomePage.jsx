@@ -213,7 +213,7 @@ export default function UserHomeProducts() {
                     />
 
                     {/* Discount badge */}
-                    <Chip
+                    {/* <Chip
                       label="20% OFF"
                       color="success"
                       size="small"
@@ -223,7 +223,7 @@ export default function UserHomeProducts() {
                         left: 10,
                         fontWeight: 600
                       }}
-                    />
+                    /> */}
                   </Box>
 
                   <CardContent>
@@ -241,11 +241,11 @@ export default function UserHomeProducts() {
                       ₹{product.price}
                     </Typography>
 
-                    <Typography variant="caption" color="green">
+                    <Typography variant="caption" sx={{ color: product.quantity > 0 ? "green" : "red", fontWeight: 500 }}>
                       {product.quantity > 0 ? "In Stock" : "Out of Stock"}
                     </Typography>
 
-                    <Button
+                    {/* <Button
                       fullWidth
                       variant="contained"
                       startIcon={<ShoppingCartOutlined />}
@@ -257,7 +257,7 @@ export default function UserHomeProducts() {
                       }}
                     >
                       Add to Cart
-                    </Button>
+                    </Button> */}
                   </CardContent>
                 </Card>
               </Grid>

@@ -1,4 +1,9 @@
 const usertable = require("../Models/UserModel")
+const jwt = require("jsonwebtoken");
+
+const SECRET_KEY = "product-crud"
+
+
 
 const registerUser = async (req,res)=>{
     try {
@@ -13,27 +18,26 @@ const registerUser = async (req,res)=>{
 }
 
 // LOGIN USER
-const loginUser = async (req,res)=>{
-    try {
-        const {email, password} = req.body
-        // Find user by email OR name
-        const user = await usertable.findOne({
-            $or: [ { email: email }, { name: email } ] })
-        if(!user){
-            return res.status(401).json({message:"User not found"})
-        }
-        if(user.password !== password){
-            return res.status(401).json({message:"Wrong password"})
-        }
-        res.status(200).json({
-            message:"Login successful",
-            udata:user
-        })
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({message:"Server error"})
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await usertable.findOne({
+      $or: [{ email: email }, { name: email }],
+    });
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
     }
-}
+    if (user.password !== password) {
+      return res.status(401).json({ message: "Wrong password" });
+    }
+    // JWT TOKEN
+    const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: "1d" });
+    res.json({ success: true,  message: "Login successful", udata: user, token: token, });
+  } catch (error) {
+    console.log("LOGIN ERROR:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 
 const getUsers = async (req,res)=>{

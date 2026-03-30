@@ -13,3 +13,7 @@ Step 5 : Install MongoDB
 * cors - (cross origin resource sharing) = used for security purpose
 
 multer - npm i multer => it is a middleware for handling file/img uploads
+
+
+jwt - json web token =>  npm i jsonwebtoken
+       -> It is used for secure authentication and autherization

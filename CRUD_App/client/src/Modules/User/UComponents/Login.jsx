@@ -48,9 +48,11 @@ export default function Login() {
       return;
     }
 
+    console.log(formdata);
+
+
     try {
       setLoading(true);
-
       const res = await axios.post(
         "http://localhost:7000/user/loginuser",
         {
@@ -59,9 +61,12 @@ export default function Login() {
         }
       );
 
+      console.log(res);
+
       alert(res.data.message);
-      localStorage.setItem("loggedUser", JSON.stringify(res.data.udata));
-      window.location.href = "/homepage";
+      //localStorage.setItem("loggedUser", JSON.stringify(res.data.udata));
+      localStorage.setItem("Token", res.data.token);
+      //window.location.href = "/homepage";
     } catch (err) {
       alert(err.response?.data?.message || "Login failed. Try again.");
     } finally {
