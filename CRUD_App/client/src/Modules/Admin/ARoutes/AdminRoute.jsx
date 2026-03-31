@@ -17,14 +17,14 @@ import UpdateUser from '../AComponents/UpdateUser'
 const drawerWidth = 260
 
 function AdminLayout() {
-  const admin = JSON.parse(localStorage.getItem('adminLoggedIn'))
+  const admin = JSON.parse(localStorage.getItem('adminInfo'))
+
   if (!admin) return <Navigate to='/admin/login' replace />
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#f0f2f5' }}>
       <Sidebar />
 
-      {/* Topbar */}
       <AppBar
         position="fixed"
         elevation={0}
@@ -40,8 +40,10 @@ function AdminLayout() {
           <Typography variant="body2" color="text.secondary" sx={{ mr: 2 }}>
             {admin.email}
           </Typography>
+
           <Avatar sx={{
-            width: 36, height: 36,
+            width: 36,
+            height: 36,
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           }}>
             <AdminPanelSettingsIcon sx={{ fontSize: 20 }} />
@@ -49,9 +51,9 @@ function AdminLayout() {
         </Toolbar>
       </AppBar>
 
-      {/* Main Content */}
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
+
         <Routes>
           <Route path='/dashboard' element={<AHome />} />
           <Route path='/users' element={<Manageuser />} />
@@ -60,15 +62,15 @@ function AdminLayout() {
           <Route path='/products' element={<ManageProduct />} />
           <Route path='/payments' element={<Payment />} />
           <Route path='/feedback' element={<Feedback />} />
+          <Route path='/viewuser' element={<ViewUser />} />
+          <Route path='/updateuser/:id' element={<UpdateUser />} />
           <Route path='/' element={<Navigate to='/admin/dashboard' replace />} />
-          <Route path='/viewuser' element={<ViewUser/>}/>
-          <Route path='/updateuser/:id' element={<UpdateUser/>}/>
         </Routes>
+
       </Box>
     </Box>
   )
 }
-
 export default function AdminRoute() {
   return (
     <Routes>

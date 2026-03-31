@@ -8,9 +8,28 @@ const SECRET_KEY = "product-crud"
 const registerUser = async (req,res)=>{
     try {
         const {name,email,password,phone,address} = req.body
-        const userdetails = new usertable({name,email,password,phone,address})
+
+        const useremail = await usertable.findOne({email: email})
+
+        if(useremail){
+            return res.status(400).json({message: "Email already exists"})
+        }
+
+        const userdetails = new usertable({
+            name,
+            email,
+            password,
+            phone,
+            address
+        })
+
         await userdetails.save()
-        res.status(201).json({message: "User registered successfully", udata: userdetails})
+
+        res.status(201).json({
+            message: "User registered successfully",
+            udata: userdetails
+        })
+
     } catch (error) {
         console.error("Error registering user:", error)
         res.status(500).json({message: "Server error", error})
@@ -85,5 +104,15 @@ const updateUser = async(req, res)=>{
         res.status(500).json({message: "Server error", error})
     }
 }
+
+const getProfile = async(req, res)=>{
+    try{
+        const user = await usertable.findById(req.userid)
+        res.json({success: true ,udata: user})
+    }catch(error){
+        console.log(error)
+        res.status(500).json({message: "Server error"})
+    }
+}
     
-module.exports = { registerUser, loginUser ,getUsers, getUserById, deleteUser, updateUser }
+module.exports = { registerUser, loginUser ,getUsers, getUserById, deleteUser, updateUser, getProfile }

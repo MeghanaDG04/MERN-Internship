@@ -31,6 +31,7 @@ app.get('/apitest',(req,res)=>{
 app.use(cors())
 app.use(express.json()) //middleware which is used to parse incoming request body in json format
 app.use('/user', require('./Routes/UserRoutes'))
+app.use('/admin', require('./Routes/AdminRoutes'))
 
 app.use('/product', require('./Routes/ProductRoutes'))
 app.use('/category',require('./Routes/CategoryRoutes'))

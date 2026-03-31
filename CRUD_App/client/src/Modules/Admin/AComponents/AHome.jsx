@@ -1,42 +1,63 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Typography, Paper } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import PeopleIcon from '@mui/icons-material/People'
 import CategoryIcon from '@mui/icons-material/Category'
-import BookOnlineIcon from '@mui/icons-material/BookOnline'
-
-const getCount = (key) => {
-  try {
-    const data = JSON.parse(localStorage.getItem(key))
-    return Array.isArray(data) ? data.length : 0
-  } catch {
-    return 0
-  }
-}
-
-const statCards = [
-  {
-    title: 'Total Users',
-    key: 'userdetails',
-    icon: <PeopleIcon sx={{ fontSize: 40 }} />,
-    gradient: 'linear-gradient(135deg, #1A73E8 0%, #49a3f1 100%)',
-  },
-  {
-    title: 'Total Categories',
-    key: 'categories',
-    icon: <CategoryIcon sx={{ fontSize: 40 }} />,
-    gradient: 'linear-gradient(135deg, #43A047 0%, #66BB6A 100%)',
-  },
-  {
-    title: 'Total Bookings',
-    key: null,
-    icon: <BookOnlineIcon sx={{ fontSize: 40 }} />,
-    gradient: 'linear-gradient(135deg, #FB8C00 0%, #FFA726 100%)',
-  },
-]
+import InventoryIcon from '@mui/icons-material/Inventory'
+import axios from 'axios'
 
 export default function AHome() {
-  return (
+
+  const [counts, setCounts] = useState({
+    users: 0,
+    categories: 0,
+    products: 0
+  })
+
+  const fetchCounts = async () => {
+    try {
+
+      const users = await axios.get("http://localhost:7000/user/getusers")
+      const categories = await axios.get("http://localhost:7000/category/getCategory")
+      const products = await axios.get("http://localhost:7000/product/getproducts")
+
+      setCounts({
+        users: users.data.alluser.length,
+        categories: categories.data.cdata.length,
+        products: products.data.pdata.length
+      })
+
+    } catch (error) {
+      console.log("Error fetching dashboard data", error)
+    }
+  }
+
+  useEffect(() => {
+    fetchCounts()
+  }, [])
+
+  const statCards = [
+    {
+      title: 'Total Users',
+      value: counts.users,
+      icon: <PeopleIcon sx={{ fontSize: 40 }} />,
+      gradient: 'linear-gradient(135deg, #1A73E8 0%, #49a3f1 100%)',
+    },
+    {
+      title: 'Total Categories',
+      value: counts.categories,
+      icon: <CategoryIcon sx={{ fontSize: 40 }} />,
+      gradient: 'linear-gradient(135deg, #43A047 0%, #66BB6A 100%)',
+    },
+    {
+      title: 'Total Products',
+      value: counts.products,
+      icon: <InventoryIcon sx={{ fontSize: 40 }} />,
+      gradient: 'linear-gradient(135deg, #FB8C00 0%, #FFA726 100%)',
+    },
+  ]
+
+   return (
     <Box>
       <Typography variant="h4" fontWeight={700} mb={1}>
         Dashboard
@@ -75,7 +96,7 @@ export default function AHome() {
                     {card.title}
                   </Typography>
                   <Typography variant="h3" fontWeight={700}>
-                    {card.key ? getCount(card.key) : 24}
+                    {card.value}
                   </Typography>
                 </Box>
                 <Box sx={{ opacity: 0.8 }}>{card.icon}</Box>

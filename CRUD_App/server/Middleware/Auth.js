@@ -8,7 +8,7 @@ const authuser = async(req, res, next) => {
         if(usertoken){
             const userinfo = await jwt.verify(usertoken, SECRET_KEY)
             console.log(userinfo)
-            req.userid = userinfo
+            req.userid = userinfo.id
             next()
         }else{
             res.json({success: false, message: "Unauthorized user token"})

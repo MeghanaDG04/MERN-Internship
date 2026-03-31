@@ -10,6 +10,7 @@ import {
   Avatar,
   InputAdornment,
 } from "@mui/material";
+
 import PersonAddOutlined from "@mui/icons-material/PersonAddOutlined";
 import PersonOutline from "@mui/icons-material/PersonOutline";
 import EmailOutlined from "@mui/icons-material/EmailOutlined";
@@ -17,11 +18,13 @@ import LockOutlined from "@mui/icons-material/LockOutlined";
 import PhoneOutlined from "@mui/icons-material/PhoneOutlined";
 import HomeOutlined from "@mui/icons-material/HomeOutlined";
 import ShoppingBag from "@mui/icons-material/ShoppingBag";
+
 import img1 from "./img1.jpg";
 import img3 from "./img3.jpg";
 import axios from "axios";
 
 export default function Register() {
+
   const [formdata, setFormdata] = useState({
     name: "",
     email: "",
@@ -29,6 +32,8 @@ export default function Register() {
     phone: "",
     address: "",
   });
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   const images = [img1, img3];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -42,20 +47,45 @@ export default function Register() {
   }, [images.length]);
 
   const handleChange = (e) => {
-    setFormdata({ ...formdata, [e.target.name]: e.target.value });
+    setFormdata({
+      ...formdata,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleregister = () => {
-    console.log("Form data :", formdata);
-    axios
-      .post("http://localhost:7000/user/registeruser", formdata)
-      .then((res) => {
-        console.log("Registered User: ", res.data.udata);
-        alert("Registered Successfully..!!");
-      })
-      .catch((error) => {
-        console.log(error);
+  const handleregister = async () => {
+
+    setErrorMessage("");
+
+    try {
+
+      const res = await axios.post(
+        "http://localhost:7000/user/registeruser",
+        formdata
+      );
+
+      console.log("Registered User:", res.data);
+
+      alert("Registered Successfully!");
+
+      setFormdata({
+        name: "",
+        email: "",
+        password: "",
+        phone: "",
+        address: "",
       });
+
+    } catch (error) {
+
+      console.log(error);
+
+      if (error.response && error.response.data.message) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage("Something went wrong");
+      }
+    }
   };
 
   const fieldStyle = {
@@ -78,6 +108,7 @@ export default function Register() {
         justifyContent: "center",
       }}
     >
+
       <Paper
         elevation={0}
         sx={{
@@ -89,7 +120,8 @@ export default function Register() {
           boxShadow: "0 25px 80px rgba(0,0,0,0.3)",
         }}
       >
-        {/* LEFT IMAGE SLIDER */}
+
+        {/* LEFT IMAGE */}
         <Box sx={{ flex: 1, position: "relative" }}>
           <img
             src={images[currentIndex]}
@@ -100,7 +132,7 @@ export default function Register() {
               objectFit: "cover",
             }}
           />
-          {/* Dark overlay */}
+
           <Box
             sx={{
               position: "absolute",
@@ -113,6 +145,7 @@ export default function Register() {
               alignItems: "center",
             }}
           >
+
             <Avatar
               sx={{
                 mb: 2,
@@ -124,6 +157,7 @@ export default function Register() {
             >
               <ShoppingBag sx={{ fontSize: 32 }} />
             </Avatar>
+
             <Typography
               variant="h3"
               fontWeight={700}
@@ -135,6 +169,7 @@ export default function Register() {
             >
               ShopSphere
             </Typography>
+
             <Typography
               variant="body1"
               sx={{
@@ -146,36 +181,6 @@ export default function Register() {
             >
               Join us and explore a world of amazing products
             </Typography>
-          </Box>
-          {/* Dot indicators */}
-          <Box
-            sx={{
-              position: "absolute",
-              bottom: 20,
-              width: "100%",
-              display: "flex",
-              justifyContent: "center",
-              gap: 1,
-              zIndex: 2,
-            }}
-          >
-            {images.map((_, index) => (
-              <Box
-                key={index}
-                sx={{
-                  width: currentIndex === index ? 24 : 8,
-                  height: 8,
-                  borderRadius: currentIndex === index ? 4 : "50%",
-                  background:
-                    currentIndex === index
-                      ? "linear-gradient(135deg, #667eea, #764ba2)"
-                      : "rgba(255,255,255,0.4)",
-                  transition: "all 0.3s ease",
-                  cursor: "pointer",
-                }}
-                onClick={() => setCurrentIndex(index)}
-              />
-            ))}
           </Box>
         </Box>
 
@@ -190,6 +195,7 @@ export default function Register() {
             background: "rgba(255,255,255,0.97)",
           }}
         >
+
           <Avatar
             sx={{
               mx: "auto",
@@ -200,171 +206,133 @@ export default function Register() {
                 "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
             }}
           >
-            <PersonAddOutlined fontSize="large" />
+            <PersonAddOutlined />
           </Avatar>
 
-          <Typography
-            variant="h4"
-            mb={0.5}
-            fontWeight={700}
-            textAlign="center"
-          >
+          <Typography variant="h4" textAlign="center" mb={2}>
             Create Account
           </Typography>
 
-          <Typography
-            variant="body2"
-            textAlign="center"
-            color="text.secondary"
-            mb={2}
-          >
-            Join ShopSphere today
-          </Typography>
+          {/* ERROR MESSAGE */}
+          {errorMessage && (
+            <Typography
+              color="error"
+              textAlign="center"
+              mb={1}
+              fontSize="14px"
+            >
+              {errorMessage}
+            </Typography>
+          )}
 
           <TextField
             label="Full Name"
             name="name"
+            value={formdata.name}
+            onChange={handleChange}
             fullWidth
             margin="dense"
             size="small"
-            onChange={handleChange}
             sx={fieldStyle}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <PersonOutline sx={{ color: "#667eea", fontSize: 20 }} />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
-            label="Email"
-            name="email"
-            fullWidth
-            margin="dense"
-            size="small"
-            onChange={handleChange}
-            sx={fieldStyle}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <EmailOutlined sx={{ color: "#667eea", fontSize: 20 }} />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
-            label="Password"
-            name="password"
-            type="password"
-            fullWidth
-            margin="dense"
-            size="small"
-            onChange={handleChange}
-            sx={fieldStyle}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <LockOutlined sx={{ color: "#667eea", fontSize: 20 }} />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
-            label="Phone Number"
-            name="phone"
-            fullWidth
-            margin="dense"
-            size="small"
-            onChange={handleChange}
-            sx={fieldStyle}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <PhoneOutlined sx={{ color: "#667eea", fontSize: 20 }} />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
-            label="Address"
-            name="address"
-            fullWidth
-            margin="dense"
-            size="small"
-            onChange={handleChange}
-            sx={fieldStyle}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <HomeOutlined sx={{ color: "#667eea", fontSize: 20 }} />
+                  <PersonOutline />
                 </InputAdornment>
               ),
             }}
           />
 
-          <FormControlLabel
-            control={
-              <Checkbox
-                size="small"
-                sx={{ "&.Mui-checked": { color: "#667eea" } }}
-              />
-            }
-            label={
-              <Typography variant="body2">
-                I agree to the{" "}
-                <span
-                  style={{
-                    background: "linear-gradient(135deg, #667eea, #764ba2)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    fontWeight: 600,
-                  }}
-                >
-                  terms and conditions
-                </span>
-              </Typography>
-            }
+          <TextField
+            label="Email"
+            name="email"
+            value={formdata.email}
+            onChange={handleChange}
+            fullWidth
+            margin="dense"
+            size="small"
+            sx={fieldStyle}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <EmailOutlined />
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          <TextField
+            label="Password"
+            name="password"
+            type="password"
+            value={formdata.password}
+            onChange={handleChange}
+            fullWidth
+            margin="dense"
+            size="small"
+            sx={fieldStyle}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockOutlined />
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          <TextField
+            label="Phone"
+            name="phone"
+            value={formdata.phone}
+            onChange={handleChange}
+            fullWidth
+            margin="dense"
+            size="small"
+            sx={fieldStyle}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <PhoneOutlined />
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          <TextField
+            label="Address"
+            name="address"
+            value={formdata.address}
+            onChange={handleChange}
+            fullWidth
+            margin="dense"
+            size="small"
+            sx={fieldStyle}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <HomeOutlined />
+                </InputAdornment>
+              ),
+            }}
           />
 
           <Button
             variant="contained"
             fullWidth
             sx={{
-              mt: 1,
+              mt: 2,
               py: 1.3,
               background:
                 "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
               borderRadius: 3,
               fontWeight: 700,
-              fontSize: "1rem",
               textTransform: "none",
-              "&:hover": {
-                background:
-                  "linear-gradient(135deg, #5a6fd6 0%, #6a4190 100%)",
-                boxShadow: "0 4px 15px rgba(102,126,234,0.4)",
-              },
             }}
             onClick={handleregister}
           >
             Create Account
           </Button>
 
-          <Typography variant="body2" textAlign="center" sx={{ mt: 2 }}>
-            Already have an account?{" "}
-            <span
-              style={{
-                background: "linear-gradient(135deg, #667eea, #764ba2)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                cursor: "pointer",
-                fontWeight: 600,
-              }}
-              onClick={() => (window.location.href = "/login")}
-            >
-              Sign In
-            </span>
-          </Typography>
         </Box>
       </Paper>
     </Box>
