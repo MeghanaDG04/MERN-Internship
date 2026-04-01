@@ -7,17 +7,23 @@ import {
   Box,
   Avatar,
   InputAdornment,
+  IconButton
 } from "@mui/material";
+
+import { useNavigate } from "react-router-dom";
 
 import PersonAddOutlined from "@mui/icons-material/PersonAddOutlined";
 import PersonOutline from "@mui/icons-material/PersonOutline";
 import EmailOutlined from "@mui/icons-material/EmailOutlined";
 import PhoneOutlined from "@mui/icons-material/PhoneOutlined";
 import HomeOutlined from "@mui/icons-material/HomeOutlined";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import axios from "axios";
 
 export default function MyProfile() {
+
+  const navigate = useNavigate();
 
   const [formdata, setFormdata] = useState({
     name: "",
@@ -26,83 +32,77 @@ export default function MyProfile() {
     address: "",
   });
 
-  //const [userid, setUserid] = useState("");
+  const [userid, setUserid] = useState("");
 
   const token = localStorage.getItem("Token");
-  console.log("TOKEN:", token);
 
- const viewprofile = async () => {
-  try {
-    const response = await fetch(
-      "http://localhost:7000/user/getprofile",
-      {
-        method: "GET",
-        headers: { "auth-token": token },
+console.log("Token",token);
+
+  const viewprofile = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:7000/user/getprofile",
+        {
+          method: "GET",
+          headers: {
+            "auth-token": token,
+          },
+        }
+      );
+
+      const details = await response.json();
+
+      if (details.udata) {
+        setFormdata({
+          name: details.udata.name,
+          email: details.udata.email,
+          phone: details.udata.phone,
+          address: details.udata.address,
+        });
+
+        setUserid(details.udata._id);
       }
-    );
 
-    const details = await response.json();
-    console.log(details.udata);
-
-    if (details.udata) {
-      setFormdata(details.udata);
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
     }
-
-  } catch (error) {
-    console.error("Error fetching profile data:", error);
-  }
-};
+  };
 
   useEffect(() => {
     viewprofile();
-  },[]);
+  }, []);
 
-  // GET PROFILE DATA
+  const handleChange = (e) => {
+    setFormdata({
+      ...formdata,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-//   useEffect(() => {
-//     axios
-//       .get("http://localhost:7000/user/getprofile", {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       })
-//       .then((res) => {
-//         const user = res.data.user;
+  const updateProfile = async () => {
+  try {
+    const response = await fetch(
+      "http://localhost:7000/user/updateprofile",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": token,
+        },
+        body: JSON.stringify(formdata),
+      }
+    );
 
-//         setFormdata({
-//           name: user.name,
-//           email: user.email,
-//           phone: user.phone,
-//           address: user.address,
-//         });
+    const data = await response.json(); // parse response
 
-//         setUserid(user._id);
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   }, []);
+    console.log("Updated User:", data.udetails);
 
-  // HANDLE CHANGE
-//   const handleChange = (e) => {
-//     setFormdata({
-//       ...formdata,
-//       [e.target.name]: e.target.value,
-//     });
-//   };
+    alert(data.message);
 
-  // UPDATE PROFILE
-//   const updateProfile = () => {
-//     axios
-//       .put(`http://localhost:7000/user/updateuser/${userid}`, formdata)
-//       .then((res) => {
-//         alert("Profile Updated Successfully");
-//         console.log(res.data);
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   };
+  } catch (error) {
+    console.error("Update Error:", error);
+  }
+};
 
   const fieldStyle = {
     "& .MuiOutlinedInput-root": {
@@ -129,8 +129,23 @@ export default function MyProfile() {
           width: "600px",
           p: 4,
           borderRadius: 4,
+          position: "relative"
         }}
       >
+
+        {/* Back Button */}
+        <IconButton
+          onClick={() => navigate(-1)}
+          sx={{
+            position: "absolute",
+            top: 16,
+            left: 16,
+            color: "#667eea"
+          }}
+        >
+          <ArrowBackIcon />
+        </IconButton>
+
         <Avatar
           sx={{
             mx: "auto",
@@ -151,7 +166,7 @@ export default function MyProfile() {
           label="Full Name"
           name="name"
           value={formdata.name}
-         // onChange={handleChange}
+          onChange={handleChange}
           fullWidth
           margin="dense"
           sx={fieldStyle}
@@ -168,7 +183,7 @@ export default function MyProfile() {
           label="Email"
           name="email"
           value={formdata.email}
-         // onChange={handleChange}
+          onChange={handleChange}
           fullWidth
           margin="dense"
           sx={fieldStyle}
@@ -185,7 +200,7 @@ export default function MyProfile() {
           label="Phone"
           name="phone"
           value={formdata.phone}
-         // onChange={handleChange}
+          onChange={handleChange}
           fullWidth
           margin="dense"
           sx={fieldStyle}
@@ -202,7 +217,7 @@ export default function MyProfile() {
           label="Address"
           name="address"
           value={formdata.address}
-         // onChange={handleChange}
+          onChange={handleChange}
           fullWidth
           margin="dense"
           sx={fieldStyle}
@@ -222,7 +237,7 @@ export default function MyProfile() {
             mt: 3,
             background: "linear-gradient(135deg,#667eea,#764ba2)",
           }}
-         // onClick={updateProfile}
+          onClick={updateProfile}
         >
           Update Profile
         </Button>

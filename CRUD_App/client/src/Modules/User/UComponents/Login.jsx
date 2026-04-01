@@ -66,7 +66,7 @@ export default function Login() {
       alert(res.data.message);
       //localStorage.setItem("loggedUser", JSON.stringify(res.data.udata));
       localStorage.setItem("Token", res.data.token);
-      //window.location.href = "/homepage";
+      window.location.href = "/homepage";
     } catch (err) {
       alert(err.response?.data?.message || "Login failed. Try again.");
     } finally {

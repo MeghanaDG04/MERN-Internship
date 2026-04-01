@@ -1,5 +1,5 @@
 const express = require('express')
-const {registerUser, loginUser, getUsers, getUserById, deleteUser, updateUser, getProfile } = require('../Controller/UserController')
+const {registerUser, loginUser, getUsers, getUserById, deleteUser, updateUser, getProfile, updateprofile } = require('../Controller/UserController')
 const auth = require('../Middleware/Auth')
 
 const route = express.Router()
@@ -12,6 +12,7 @@ route.delete('/deleteuserbyid/:id', deleteUser)
 route.put('/updateuser/:id', updateUser)
 
 route.get('/getprofile', auth, getProfile)
+route.put('/updateprofile', auth, updateprofile)
 
 
 module.exports = route

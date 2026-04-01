@@ -333,6 +333,22 @@ export default function Register() {
             Create Account
           </Button>
 
+          <Typography variant="body2" textAlign="center" sx={{ mt: 3 }}>
+            Already have an account?{" "}
+            <span
+              style={{
+                background: "linear-gradient(135deg, #667eea, #764ba2)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                cursor: "pointer",
+                fontWeight: 600,
+              }}
+              onClick={() => (window.location.href = "/login")}
+            >
+              Sign In
+            </span>
+          </Typography>
+
         </Box>
       </Paper>
     </Box>
