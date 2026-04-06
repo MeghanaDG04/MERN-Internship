@@ -23,9 +23,14 @@ const pages = [
   { name: "About", path: "/about", icon: <InfoIcon /> },
 ];
 
-const settings = [
+const token = localStorage.getItem("Token");
+console.log(token);
+
+const settings = token ? [
   { name: "Profile", path: "/myprofile", icon: <PersonIcon /> },
   { name: "Logout", path: "/login", icon: <LogoutIcon /> },
+] : [
+  { name: "Login", path: "/login", icon: <PersonIcon /> },
 ];
 
 //const navigate = useNavigate();

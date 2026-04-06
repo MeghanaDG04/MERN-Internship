@@ -19,7 +19,7 @@ import PhoneOutlined from "@mui/icons-material/PhoneOutlined";
 import HomeOutlined from "@mui/icons-material/HomeOutlined";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-import axios from "axios";
+//import axios from "axios";
 
 export default function MyProfile() {
 
