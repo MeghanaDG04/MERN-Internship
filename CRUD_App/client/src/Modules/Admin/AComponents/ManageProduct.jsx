@@ -4,14 +4,17 @@ import {
   TableHead, TableRow, IconButton, Button, TextField, Dialog, DialogTitle,
   DialogContent, DialogActions, Alert
 } from '@mui/material'
+
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import AddIcon from '@mui/icons-material/Add'
 import InventoryIcon from '@mui/icons-material/Inventory'
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
+
 import axios from 'axios'
 
 export default function ManageProduct() {
@@ -21,6 +24,7 @@ export default function ManageProduct() {
   const [open, setOpen] = useState(false)
   const [success, setSuccess] = useState('')
   const [editId, setEditId] = useState(null)
+  const [oldImage, setOldImage] = useState('')
 
   const [form, setForm] = useState({
     name: '',
@@ -28,7 +32,7 @@ export default function ManageProduct() {
     quantity: '',
     category: '',
     description: '',
-    productimage:''
+    productimage: null
   })
 
   // FETCH PRODUCTS
@@ -55,71 +59,124 @@ export default function ManageProduct() {
   }, [])
 
   const handleChange = (e) => {
+
     if (e.target.name === 'productimage') {
       setForm({ ...form, productimage: e.target.files[0] })
     } else {
       setForm({ ...form, [e.target.name]: e.target.value })
     }
+
   }
 
+  // EDIT PRODUCT
   const handleEdit = (product) => {
+
     setForm({
       name: product.name,
       price: product.price,
       quantity: product.quantity,
       category: product.category?._id,
       description: product.description,
-      productimage: ''
+      productimage: null
     })
+
+    setOldImage(product.productimage)
     setEditId(product._id)
     setOpen(true)
+
   }
 
+  // SAVE PRODUCT
   const handleSave = () => {
 
     if (!form.name.trim() || !form.price) return
 
+    const formData = new FormData()
+
+    formData.append("name", form.name)
+    formData.append("price", form.price)
+    formData.append("quantity", form.quantity)
+    formData.append("category", form.category)
+    formData.append("description", form.description)
+
+    if (form.productimage) {
+      formData.append("productimage", form.productimage)
+    }
+
     if (editId) {
-      axios.put(`http://localhost:7000/product/editproduct/${editId}`, form,
-          {headers:{"Content-Type":'multipart/form-data'}})
+
+      axios.put(`http://localhost:7000/product/editproduct/${editId}`, formData)
         .then((res) => {
+
           setSuccess("Product updated successfully!")
-          console.log("Updated Product:", res.data.pdata)
+
           setTimeout(() => setSuccess(''), 3000)
+
           setOpen(false)
           setEditId(null)
-          setForm({ name: '', price: '', quantity:'', category: '', description: '', productimage:'' })
+          setOldImage('')
+
+          setForm({
+            name: '',
+            price: '',
+            quantity: '',
+            category: '',
+            description: '',
+            productimage: null
+          })
+
           fetchProducts()
+          console.log(res);
+
         })
         .catch(err => console.log(err))
 
-    } else {
-      axios.post('http://localhost:7000/product/addproduct', form,
-          {headers:{"Content-Type":'multipart/form-data'}})
+    }
+    else {
+
+      axios.post('http://localhost:7000/product/addproduct', formData)
         .then((res) => {
+
           setSuccess("Product added successfully!")
-          console.log("New Product:", res.data.pdata)
+
           setTimeout(() => setSuccess(''), 3000)
+
           setOpen(false)
-          setForm({ name: '', price: '', quantity:'', category: '', description: '', productimage: ''})
+
+          setForm({
+            name: '',
+            price: '',
+            quantity: '',
+            category: '',
+            description: '',
+            productimage: null
+          })
+
           fetchProducts()
+          console.log(res);
+
         })
         .catch(err => console.log(err))
+
     }
+
   }
 
   const handleDelete = (id) => {
+
     axios.delete(`http://localhost:7000/product/deleteproduct/${id}`)
-      .then((res) => {
-        console.log("Deleted Product:", res.data.pdata)
-        fetchProducts()})
+      .then(() => {
+        fetchProducts()
+      })
       .catch(err => console.log(err))
+
   }
 
   return (
     <Box>
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+
         <Typography variant="h4" fontWeight={700}>
           Manage Products
         </Typography>
@@ -128,18 +185,32 @@ export default function ManageProduct() {
           variant="contained"
           startIcon={<AddIcon />}
           onClick={() => {
+
             setEditId(null)
-            setForm({ name: '', price: '', quantity:'', category: '', description: '' })
+            setOldImage('')
+
+            setForm({
+              name: '',
+              price: '',
+              quantity: '',
+              category: '',
+              description: '',
+              productimage: null
+            })
+
             setOpen(true)
+
           }}
         >
           Add Product
         </Button>
+
       </Box>
 
       {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
 
       <Paper>
+
         <TableContainer>
           <Table>
 
@@ -159,8 +230,11 @@ export default function ManageProduct() {
             <TableBody>
 
               {products.length > 0 ? (
+
                 products.map((product, index) => (
+
                   <TableRow key={product._id}>
+
                     <TableCell>{index + 1}</TableCell>
 
                     <TableCell>
@@ -174,19 +248,25 @@ export default function ManageProduct() {
                     <TableCell>₹{product.price}</TableCell>
                     <TableCell>{product.quantity}</TableCell>
                     <TableCell>{product.description}</TableCell>
+
                     <TableCell>
-                        {product.productimage && (
-                          <img
-                            src={`http://localhost:7000/image/${product.productimage}`}
-                            alt="product"
-                            width="60"
-                            height="60"
-                            style={{ objectFit: "cover", borderRadius: "6px" }}
-                          />
-                        )}
-                      </TableCell>
+
+                      {product.productimage && (
+
+                        <img
+                          src={`http://localhost:7000/image/${product.productimage}`}
+                          alt="product"
+                          width="60"
+                          height="60"
+                          style={{ objectFit: "cover", borderRadius: "6px" }}
+                        />
+
+                      )}
+
+                    </TableCell>
 
                     <TableCell align="center">
+
                       <IconButton color="primary" onClick={() => handleEdit(product)}>
                         <EditIcon />
                       </IconButton>
@@ -194,22 +274,31 @@ export default function ManageProduct() {
                       <IconButton color="error" onClick={() => handleDelete(product._id)}>
                         <DeleteIcon />
                       </IconButton>
+
                     </TableCell>
+
                   </TableRow>
+
                 ))
+
               ) : (
+
                 <TableRow>
-                  <TableCell colSpan={7} align="center">
+                  <TableCell colSpan={8} align="center">
                     No products found
                   </TableCell>
                 </TableRow>
+
               )}
 
             </TableBody>
 
           </Table>
         </TableContainer>
+
       </Paper>
+
+      {/* DIALOG */}
 
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
 
@@ -229,19 +318,26 @@ export default function ManageProduct() {
           />
 
           <FormControl fullWidth sx={{ mb: 2 }}>
+
             <InputLabel>Category</InputLabel>
+
             <Select
               name="category"
               value={form.category}
               label="Category"
               onChange={handleChange}
             >
+
               {categories.map((cat) => (
+
                 <MenuItem key={cat._id} value={cat._id}>
                   {cat.category}
                 </MenuItem>
+
               ))}
+
             </Select>
+
           </FormControl>
 
           <TextField
@@ -254,27 +350,43 @@ export default function ManageProduct() {
             sx={{ mb: 2 }}
           />
 
+          {/* SHOW OLD IMAGE */}
+
+          {oldImage && (
+
+            <Box sx={{ mb: 2 }}>
+
+              {/* <Typography variant="body2"></Typography> */}
+
+              <img
+                src={`http://localhost:7000/image/${oldImage}`}
+                alt="product"
+                width="120"
+                style={{ borderRadius: 6 }}
+              />
+
+            </Box>
+
+          )}
+
           <TextField
             fullWidth
-            type='file'
-            //label='productimage'
-            name='productimage'
-            //value={form.productimage}
+            type="file"
+            name="productimage"
             onChange={handleChange}
-            InputLabelProps={{shrink:true}}
+            InputLabelProps={{ shrink: true }}
             sx={{ mb: 2 }}
           />
 
           <TextField
             fullWidth
-            type='number'
-            label='quantity'
-            name='quantity'
+            type="number"
+            label="Quantity"
+            name="quantity"
             value={form.quantity}
             onChange={handleChange}
             sx={{ mb: 2 }}
           />
-
 
           <TextField
             fullWidth
@@ -289,10 +401,13 @@ export default function ManageProduct() {
         </DialogContent>
 
         <DialogActions>
+
           <Button onClick={() => setOpen(false)}>Cancel</Button>
+
           <Button variant="contained" onClick={handleSave}>
             {editId ? "Update" : "Add"}
           </Button>
+
         </DialogActions>
 
       </Dialog>
