@@ -8,6 +8,7 @@ import Login from '../UComponents/Login'
 import Register from '../UComponents/Register'
 import ViewSingleProduct from '../UComponents/ViewSingleProduct'
 import MyProfile from '../UComponents/MyProfile'
+import BookingForm from '../UComponents/BookingForm'
 
 
 
@@ -25,6 +26,7 @@ function AppContent(){
           <Route path='/register' element={<Register/>}/>
           <Route path='/viewsingleproduct/:id' element={<ViewSingleProduct/>}/>
           <Route path='/myprofile' element={<MyProfile/>}/>
+          <Route path='/bookingform/:id' element={<BookingForm/>}/>
       </Routes>
     </div>
   )

@@ -157,7 +157,6 @@ export default function ManageProduct() {
 
         })
         .catch(err => console.log(err))
-
     }
 
   }

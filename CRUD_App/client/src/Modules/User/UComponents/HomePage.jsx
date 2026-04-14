@@ -27,8 +27,10 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import VerifiedIcon from "@mui/icons-material/Verified";
 
+
 import axios from "axios";
 import img4 from "./img4.jpg";
+import { use } from "react";
 
 export default function UserHomeProducts() {
 
@@ -211,19 +213,6 @@ export default function UserHomeProducts() {
                         "&:hover": { transform: "scale(1.05)" }
                       }}
                     />
-
-                    {/* Discount badge */}
-                    {/* <Chip
-                      label="20% OFF"
-                      color="success"
-                      size="small"
-                      sx={{
-                        position: "absolute",
-                        top: 10,
-                        left: 10,
-                        fontWeight: 600
-                      }}
-                    /> */}
                   </Box>
 
                   <CardContent>
@@ -245,21 +234,13 @@ export default function UserHomeProducts() {
                       {product.quantity > 0 ? "In Stock" : "Out of Stock"}
                     </Typography>
 
-                    {/* <Button
-                      fullWidth
-                      variant="contained"
-                      startIcon={<ShoppingCartOutlined />}
-                      sx={{
-                        mt: 2,
-                        borderRadius: 3,
-                        textTransform: "none",
-                        background: "linear-gradient(135deg, #667eea, #764ba2)"
-                      }}
-                    >
-                      Add to Cart
-                    </Button> */}
                   </CardContent>
+                
                 </Card>
+                <Button variant="contained" color="success" fullWidth onClick={() => navigate(`/bookingform/${product._id}`)}>
+                  Book
+                </Button>
+                
               </Grid>
             ))
           ) : (
