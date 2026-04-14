@@ -1,14 +1,21 @@
-import { Box, Button, TextField, Typography, Paper, Divider } from '@mui/material'
+import { Box, Button, TextField, Typography, Paper, IconButton, InputAdornment } from '@mui/material'
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import PersonOutline from '@mui/icons-material/PersonOutline';
+import EmailOutlined from '@mui/icons-material/EmailOutlined';
+import PhoneOutlined from '@mui/icons-material/PhoneOutlined';
+import HomeOutlined from '@mui/icons-material/HomeOutlined';
+import ShoppingCartOutlined from '@mui/icons-material/ShoppingCartOutlined';
 
 export default function Bookingform() {
 
-  const { productId } = useParams()
+  const { id } = useParams()
+  const navigate = useNavigate()
 
   const [booking, setBooking] = useState({
-    fname:'',
+    fullname:'',
     email:'',
     phone:'',
     address:'',
@@ -19,52 +26,71 @@ export default function Bookingform() {
     setBooking({...booking, [e.target.name]: e.target.value})
   }
 
+  const Token = localStorage.getItem("Token")
+
   const handleSubmit = async () => {
-    try {
+  try {
 
-      const res = await axios.post("http://localhost:7000/booking/createbooking", {
-        fullname: booking.fname,
-        email: booking.email,
-        phone: booking.phone,
-        address: booking.address,
-        quantity: booking.quantity,
-        totalAmount: 0
-      })
+    const res = await axios.post("http://localhost:7000/booking/createbooking",
+      { ...booking, productID: id }, 
+      { headers: { "auth-token": Token } }
+    )
 
-      alert(res.data.message)
-      console.log(res.data.booking);
+    alert(res.data.message)
+    console.log(res.data.booking)
 
-    } catch (error) {
-      console.log(error)
-      alert("Booking failed")
-    }
+  } catch (error) {
+    console.log(error)
+    alert("Booking failed")
   }
+}
+
+  const fieldStyle = {
+    "& .MuiOutlinedInput-root": {
+      borderRadius: 2,
+      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+        borderColor: "#667eea",
+      },
+    },
+    "& .MuiInputLabel-root.Mui-focused": { color: "#667eea" },
+  };
 
   return (
 
     <Box
       sx={{
-        minHeight: "100vh",
+        height: "100vh",
         display: "flex",
+        background: "linear-gradient(135deg,#667eea,#764ba2)",
         justifyContent: "center",
         alignItems: "center",
-        background: "linear-gradient(to right, #eef2f3, #ffffff)",
-        p:3
       }}
     >
 
       <Paper
         elevation={4}
         sx={{
-          width: "100%",
-          maxWidth: 500,
+          width: "600px",
           p: 4,
-          borderRadius: 3
+          borderRadius: 4,
+          position: "relative"
         }}
       >
 
+        <IconButton
+          onClick={() => navigate(-1)}
+          sx={{
+            position: "absolute",
+            top: 16,
+            left: 16,
+            color: "#667eea"
+          }}
+        >
+          <ArrowBackIcon />
+        </IconButton>
+
         <Typography
-          variant="h4"
+          variant="h5"
           align="center"
           sx={{ fontWeight: 600, mb: 1 }}
         >
@@ -79,15 +105,21 @@ export default function Bookingform() {
           Fill the details below to complete your booking
         </Typography>
 
-        <Divider sx={{ mb: 3 }} />
-
-        <Box sx={{ display:"flex", flexDirection:"column", gap:2.5 }}>
+        <Box sx={{ display:"flex", flexDirection:"column", gap:2 }}>
 
           <TextField
             label="Full Name"
-            name="fname"
+            name="fullname"
             fullWidth
             onChange={handleChange}
+            sx={fieldStyle}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <PersonOutline />
+                </InputAdornment>
+              ),
+            }}
           />
 
           <TextField
@@ -95,6 +127,14 @@ export default function Bookingform() {
             name="email"
             fullWidth
             onChange={handleChange}
+            sx={fieldStyle}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <EmailOutlined />
+                </InputAdornment>
+              ),
+            }}
           />
 
           <TextField
@@ -103,6 +143,14 @@ export default function Bookingform() {
             name="phone"
             fullWidth
             onChange={handleChange}
+            sx={fieldStyle}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <PhoneOutlined />
+                </InputAdornment>
+              ),
+            }}
           />
 
           <TextField
@@ -112,6 +160,14 @@ export default function Bookingform() {
             rows={3}
             fullWidth
             onChange={handleChange}
+            sx={fieldStyle}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <HomeOutlined />
+                </InputAdornment>
+              ),
+            }}
           />
 
           <TextField
@@ -120,20 +176,28 @@ export default function Bookingform() {
             name="quantity"
             fullWidth
             onChange={handleChange}
+            sx={fieldStyle}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <ShoppingCartOutlined />
+                </InputAdornment>
+              ),
+            }}
           />
 
           <Button
             variant="contained"
-            color="success"
             size="large"
             fullWidth
             sx={{
-              mt:1,
-              py:1.4,
-              fontSize:16,
-              fontWeight:600,
-              borderRadius:2,
-              textTransform:"none"
+              mt: 1,
+              py: 1.4,
+              fontSize: 16,
+              fontWeight: 600,
+              borderRadius: 2,
+              textTransform: "none",
+              background: "linear-gradient(135deg,#667eea,#764ba2)",
             }}
             onClick={handleSubmit}
           >
