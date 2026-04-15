@@ -23,8 +23,10 @@ const menuItems = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/admin/dashboard' },
   { text: 'Users', icon: <PeopleIcon />, path: '/admin/users' },
   { text: 'Products', icon: <InventoryIcon />, path: '/admin/products' },
+  {text: 'Bookings', icon: <InventoryIcon />, path: '/admin/bookings'},
   { text: 'Payments', icon: <PaymentIcon />, path: '/admin/payments' },
   { text: 'Feedback', icon: <FeedbackIcon />, path: '/admin/feedback' },
+
 ]
 
 const categoryItems = [

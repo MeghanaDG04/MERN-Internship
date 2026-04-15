@@ -196,6 +196,7 @@ export default function ViewSingleProduct() {
                 fontWeight: 600,
                 textTransform: "none",
               }}
+              onClick={() => navigate(`/bookingform/${product._id}`)}
             >
               Buy Now
             </Button>

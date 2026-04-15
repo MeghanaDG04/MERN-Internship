@@ -10,7 +10,7 @@ const bookingSchema = new mongoose.Schema({
     productID : { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
     bookingDate: { type: Date, default: Date.now },
     quantity :{ type: Number, default: 1},
-    totalAmount : { type: Number},
+    totalamount : { type: Number},
     bookingstatus : { type: String, enum: ['Pending', 'Confirmed', 'Cancelled'], default: 'Pending'  }
 
 });

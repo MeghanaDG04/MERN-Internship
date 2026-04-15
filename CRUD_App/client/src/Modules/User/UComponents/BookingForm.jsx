@@ -8,6 +8,8 @@ import EmailOutlined from '@mui/icons-material/EmailOutlined';
 import PhoneOutlined from '@mui/icons-material/PhoneOutlined';
 import HomeOutlined from '@mui/icons-material/HomeOutlined';
 import ShoppingCartOutlined from '@mui/icons-material/ShoppingCartOutlined';
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import { useEffect } from 'react';
 
 export default function Bookingform() {
 
@@ -19,12 +21,36 @@ export default function Bookingform() {
     email:'',
     phone:'',
     address:'',
-    quantity:''
+    quantity:'',
+    totalamount:''
   })
-
+  
+  const [price, setPrice] = useState(0)
   const handleChange = (e) => {
     setBooking({...booking, [e.target.name]: e.target.value})
+    //console.log(object)({...booking, [e.target.name]: e.target.value})
+    if(e.target.name === "quantity"){
+      const quantity = e.target.value
+      const total = quantity * price
+      setBooking(prev => ({...prev, totalamount: total}))
+    }else{
+      setBooking({...booking, [e.target.name]: e.target.value})
+      //console.log(object)({...booking, [e.target.name]: e.target.value})
+    }
   }
+
+  useEffect(()=>{
+    axios.get(`http://localhost:7000/product/getsingleproduct/${id}`)
+    .then((res) => {
+      console.log("Product Details", res.data.pdata.price)
+      setPrice(res.data.pdata.price)
+      // const price = res.data.pdata.price
+      // setBooking(prev => ({...prev, totalamount: price}))
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  },[id])
 
   const Token = localStorage.getItem("Token")
 
@@ -59,7 +85,7 @@ export default function Bookingform() {
 
     <Box
       sx={{
-        height: "100vh",
+        height: "130vh",
         display: "flex",
         background: "linear-gradient(135deg,#667eea,#764ba2)",
         justifyContent: "center",
@@ -184,6 +210,44 @@ export default function Bookingform() {
                 </InputAdornment>
               ),
             }}
+          />
+
+          <TextField
+            type="number"
+            label="Price"
+            name="price"
+            fullWidth
+            onChange={handleChange}
+            sx={fieldStyle}
+            InputProps={{
+              readOnly: true,
+              startAdornment: (
+                <InputAdornment position="start">
+                  <CurrencyRupeeIcon />
+                </InputAdornment>
+              ),
+            }}
+            value={price}
+
+          />
+
+          <TextField
+            type="number"
+            label="Total Amount"
+            name="totalamount"
+            fullWidth
+            onChange={handleChange}
+            sx={fieldStyle}
+            InputProps={{
+              readOnly: true,
+              startAdornment: (
+                <InputAdornment position="start">
+                  <CurrencyRupeeIcon />
+                </InputAdornment>
+              ),
+            }}
+            value={booking.totalamount}
+
           />
 
           <Button
