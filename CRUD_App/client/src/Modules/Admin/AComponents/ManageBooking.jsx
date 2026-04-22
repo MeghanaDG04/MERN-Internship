@@ -81,14 +81,24 @@ export default function ManageBooking() {
       .catch((err) => console.log(err));
   };
 
-  // UPDATE STATUS DIRECTLY
-  const handleStatusChange = (id, status) => {
-    axios
-      .put(`http://localhost:7000/booking/updatebooking/${id}`, {
-        bookingstatus: status,
-      })
-      .then(() => fetchBookings())
-      .catch((err) => console.log(err));
+  const [statusDialog, setStatusDialog] = useState({ open: false, id: null, status: null });
+
+  const openStatusDialog = (id, status) => {
+    setStatusDialog({ open: true, id, status });
+  };
+
+  const handleStatusChange = () => {
+    if (statusDialog.id && statusDialog.status) {
+      axios
+        .put(`http://localhost:7000/booking/updatebooking/${statusDialog.id}`, {
+          bookingstatus: statusDialog.status,
+        })
+        .then(() => {
+          setStatusDialog({ open: false, id: null, status: null });
+          fetchBookings();
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   return (
@@ -136,7 +146,7 @@ export default function ManageBooking() {
 
                     <TableCell>{b.email}</TableCell>
                     <TableCell>{b.phone}</TableCell>
-                    <TableCell>{b.productID?.productname || "N/A"}</TableCell>
+                    <TableCell>{b.productID?.name || "N/A"}</TableCell>
                     <TableCell>{b.quantity}</TableCell>
                     <TableCell>₹{b.totalamount}</TableCell>
                     <TableCell>
@@ -145,14 +155,22 @@ export default function ManageBooking() {
                         : "N/A"}
                     </TableCell>
 
-                    {/* STATUS DROPDOWN */}
+                     {/* STATUS DROPDOWN */}
                     <TableCell>
                       <Select
                         size="small"
                         value={b.bookingstatus}
+                        disabled={b.bookingstatus === "Confirmed"}
                         onChange={(e) =>
-                          handleStatusChange(b._id, e.target.value)
+                          openStatusDialog(b._id, e.target.value)
                         }
+                        sx={{
+                          bgcolor: b.bookingstatus === "Confirmed" ? "rgba(0,0,0,0.05)" : "transparent",
+                          "& .MuiSelect-select": {
+                            display: "flex",
+                            alignItems: "center",
+                          }
+                        }}
                       >
                         <MenuItem value="Pending">Pending</MenuItem>
                         <MenuItem value="Confirmed">Confirmed</MenuItem>
@@ -218,16 +236,16 @@ export default function ManageBooking() {
             }
           />
 
-          <TextField
+          {/* <TextField
             label="Quantity"
             type="number"
             value={editBooking.quantity}
             onChange={(e) =>
               setEditBooking({ ...editBooking, quantity: e.target.value })
             }
-          />
+          /> */}
 
-          <Select
+          {/* <Select
             value={editBooking.bookingstatus}
             onChange={(e) =>
               setEditBooking({
@@ -239,13 +257,31 @@ export default function ManageBooking() {
             <MenuItem value="Pending">Pending</MenuItem>
             <MenuItem value="Confirmed">Confirmed</MenuItem>
             <MenuItem value="Cancelled">Cancelled</MenuItem>
-          </Select>
+          </Select> */}
         </DialogContent>
 
         <DialogActions>
           <Button onClick={() => setOpen(false)}>Cancel</Button>
           <Button variant="contained" onClick={handleUpdate}>
             Update
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* STATUS CHANGE CONFIRMATION DIALOG */}
+      <Dialog open={statusDialog.open} onClose={() => setStatusDialog({ open: false, id: null, status: null })}>
+        <DialogTitle>Confirm Status Change</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to change the status to "{statusDialog.status}"?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setStatusDialog({ open: false, id: null, status: null })} variant="outlined" color='error'>
+            Cancel
+          </Button>
+          <Button variant="contained" color='success' onClick={handleStatusChange}>
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>
